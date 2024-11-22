@@ -26,16 +26,11 @@ jobs:
         run: |
           git fetch origin gh-pages:gh-pages || echo "gh-pages branch does not exist yet"
       
-      # Create a temporary directory for existing packages
-      - name: Create temp directory for existing packages
-        run: mkdir -p old-packages
-
-      # Extract existing packages and index.yaml
       - name: Copy existing packages and index.yaml
-        if: ${{ github.event_name == 'push' }}
         run: |
-          if [ -d "gh-pages" ]; then
-            cp gh-pages/* old-packages/ || echo "No existing packages found"
+          mkdir -p old-packages
+          if git checkout gh-pages; then
+            cp -r * ../old-packages || echo "No existing packages found"
           fi
           ls -la ./
           ls -la ./old-packages/
