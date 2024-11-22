@@ -29,8 +29,8 @@ jobs:
           
       - name: Bring files from gh-pages
         run: |
-          mkdir -p test
-          cp * test
+          mkdir -p old-packages
+          cp *.tgz old-packages/
 
       # Package new Helm charts
       - name: Package Helm Charts
