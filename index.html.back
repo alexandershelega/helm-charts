@@ -47,7 +47,7 @@
     <main>
         <p>This is the Helm chart repository for <strong>Your Project</strong>.</p>
         <p>Add this repository to Helm with the following command:</p>
-        <pre><code>helm repo add my-repo https://<username>.github.io/<repository-name></code></pre>
+        <pre><code>helm repo add general https://alexandershelega.github.io/helm-charts</code></pre>
         <h2>Available Charts</h2>
         <ul class="charts">
             <li><a href="./charts/chart-one-1.0.0.tgz">chart-one</a> - Version 1.0.0</li>
@@ -56,7 +56,7 @@
         </ul>
     </main>
     <footer>
-        <p>&copy; 2024 Your Organization or Name</p>
+        <p>&copy; 2024 </p>
     </footer>
 </body>
 </html>
