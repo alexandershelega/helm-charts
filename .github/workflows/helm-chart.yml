@@ -50,6 +50,11 @@ jobs:
       with:
         version: v3.13.0
 
+    - name: Download Packaged Charts
+      uses: actions/download-artifact@v3
+      with:
+        name: helm-charts-packages
+
     - name: Authenticate with GHCR
       run: echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ghcr.io --username ${{ github.actor }} --password-stdin
 
