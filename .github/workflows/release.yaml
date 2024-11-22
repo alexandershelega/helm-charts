@@ -26,15 +26,21 @@ jobs:
         run: |
           git fetch origin gh-pages:gh-pages || echo "gh-pages branch does not exist yet"
       
-      - name: Copy existing packages and index.yaml
-        run: |
-          mkdir -p old-packages
-          if git checkout gh-pages; then
-            cp -r * ./old-packages/ || echo "No existing packages found"
-          fi
-          ls -la ./
-          ls -la ./old-packages/
           
+      - name: Bring files from gh-pages
+        run: |
+          if git show-ref --quiet refs/heads/gh-pages; then
+            git checkout gh-pages -- .  # Bring all files from gh-pages
+            mkdir -p old-packages
+            mv * old-packages/ || echo "No files found in gh-pages"
+            git checkout main          # Switch back to the main branch
+          else
+            echo "gh-pages branch does not exist; nothing to fetch"
+          fi
+          git branch
+          ls -la ./
+          echo ______
+	  ls -la ./old-packages
 
       # Package new Helm charts
       - name: Package Helm Charts
