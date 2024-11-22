@@ -35,6 +35,9 @@ jobs:
         name: helm-charts-packages
         path: ./packages
 
+    - name: List Contents of ./packages
+      run: ls -la ./packages
+
   publish-to-ghcr:
     runs-on: ubuntu-latest
     needs: lint-and-package
