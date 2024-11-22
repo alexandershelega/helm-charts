@@ -49,6 +49,7 @@ jobs:
       # Merge old and new packages
       - name: Merge old and new packages
         run: |
+          ls -la ./
           cp old-packages/* packaged/ || echo "No old packages to copy"
           rm -rf old-packages
 
