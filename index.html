@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helm Chart Repository</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        header {
+            background-color: #0078d4;
+            color: white;
+            padding: 1rem;
+        }
+        main {
+            padding: 2rem;
+        }
+        footer {
+            background-color: #f8f8f8;
+            padding: 1rem;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        .charts {
+            margin-top: 2rem;
+            list-style: none;
+            padding: 0;
+        }
+        .charts li {
+            margin: 1rem 0;
+        }
+        a {
+            color: #0078d4;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Helm Chart Repository</h1>
+    </header>
+    <main>
+        <p>This is the Helm chart repository for <strong>Your Project</strong>.</p>
+        <p>Add this repository to Helm with the following command:</p>
+        <pre><code>helm repo add my-repo https://<username>.github.io/<repository-name></code></pre>
+        <h2>Available Charts</h2>
+        <ul class="charts">
+            <li><a href="./charts/chart-one-1.0.0.tgz">chart-one</a> - Version 1.0.0</li>
+            <li><a href="./charts/chart-two-1.0.0.tgz">chart-two</a> - Version 1.0.0</li>
+            <li><a href="./charts/chart-three-1.0.0.tgz">chart-three</a> - Version 1.0.0</li>
+        </ul>
+    </main>
+    <footer>
+        <p>&copy; 2024 Your Organization or Name</p>
+    </footer>
+</body>
+</html>
