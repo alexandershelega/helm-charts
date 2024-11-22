@@ -29,9 +29,17 @@ jobs:
           
       - name: Bring files from gh-pages
         run: |
-          ls -la ./
-          mkdir -p old-packages
-          cp *.tgz old-packages/
+          if git show-ref --quiet refs/heads/gh-pages; then
+            git checkout gh-pages -- .  # Bring all files from gh-pages
+            mkdir -p temp-files
+            mv * temp-files/ || echo "No files found in gh-pages"
+            git checkout main          # Switch back to the main branch
+            mv temp-files/* .          # Move files back to main branch workspace
+            rm -rf temp-files          # Clean up temporary files
+          else
+            echo "gh-pages branch does not exist; nothing to fetch"
+          fi
+
 
       # Package new Helm charts
       - name: Package Helm Charts
