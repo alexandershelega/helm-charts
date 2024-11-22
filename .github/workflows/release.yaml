@@ -38,6 +38,8 @@ jobs:
             cp gh-pages/* old-packages/ || echo "No existing packages found"
           fi
           ls -la ./
+          ls -la ./old-packages/
+          
 
       # Package new Helm charts
       - name: Package Helm Charts
