@@ -3,40 +3,40 @@ entries:
   general:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-11-22T09:39:22.903522177Z"
+    created: "2024-11-22T09:40:59.337526244Z"
     description: Universal Chart for deploying kubernetes applications
-    digest: 01915643e7607304aa13a174d1d886d037ba5e8e6d3d9a2d3513de106dd9f7be
+    digest: cce588272414ee35518b3d1309c9f378c06eff9d204c2543bc3e2b04e2cd5dc5
     maintainers:
     - email: alexander.shelega@gmail.com
       name: Alexander Shelega
     name: general
     urls:
-    - https://alexandershelega.github.io/alexandershelega/helm-charts/general-0.1.7.tgz
+    - https://alexandershelega.github.io/helm-charts/general-0.1.7.tgz
     version: 0.1.7
   prometheus-configs:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-11-22T09:39:22.903848514Z"
+    created: "2024-11-22T09:40:59.337854515Z"
     description: Prometheus Alert Generator
-    digest: 004d2470f805bbed431086d20b4e8c41383cef65dba0a65d8d4a1904071ba6ee
+    digest: cf9849339f6e324098e14155a813babdb0a7523843ad52706c688f0a8b57f1f8
     maintainers:
     - email: alexander.shelega@gmail.com
       name: Alexander Shelega
     name: prometheus-configs
     urls:
-    - https://alexandershelega.github.io/alexandershelega/helm-charts/prometheus-configs-0.0.6.tgz
+    - https://alexandershelega.github.io/helm-charts/prometheus-configs-0.0.6.tgz
     version: 0.0.6
   vm-configs:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-11-22T09:39:22.904159152Z"
+    created: "2024-11-22T09:40:59.338160114Z"
     description: VM Alert/Scrape Generator
-    digest: dac4ed66de02f0dabfe189a48d2403f48bc354fec173b245f7738fcf0a6d8e3b
+    digest: e20bfa8421b7252faae8423ba787a6e93d34abbfe9353c4bf62597ea1a8b97dc
     maintainers:
     - email: alexander.shelega@gmail.com
       name: Alexander Shelega
     name: vm-configs
     urls:
-    - https://alexandershelega.github.io/alexandershelega/helm-charts/vm-configs-0.0.4.tgz
+    - https://alexandershelega.github.io/helm-charts/vm-configs-0.0.4.tgz
     version: 0.0.4
-generated: "2024-11-22T09:39:22.902745161Z"
+generated: "2024-11-22T09:40:59.336722199Z"
