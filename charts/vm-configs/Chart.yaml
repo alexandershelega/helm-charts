@@ -1,8 +1,0 @@
-apiVersion: v2
-name: vm-configs
-description: VM Alert/Scrape Generator
-version: 0.0.4
-appVersion: "1.0.0"
-maintainers:
-- name: Alexander Shelega
-  email: alexander.shelega@gmail.com
