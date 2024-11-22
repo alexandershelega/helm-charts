@@ -1,0 +1,44 @@
+name: Publish Helm Charts to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Set up Helm
+      - name: Set up Helm
+        uses: azure/setup-helm@v4.2.0
+        with:
+          version: v3.13.0
+
+      # Package Helm charts
+      - name: Package Helm Charts
+        run: |
+          mkdir -p packaged
+          for chart in charts/*; do
+            if [ -d "$chart" ]; then
+              helm package "$chart" -d packaged/
+            fi
+          done
+
+      # Generate index.yaml
+      - name: Generate Helm Repository Index
+        run: |
+          helm repo index packaged --url https://${{ github.repository_owner }}.github.io/helm-charts/
+
+      # Publish to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: packaged
+          publish_branch: gh-pages

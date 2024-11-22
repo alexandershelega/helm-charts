@@ -20,7 +20,25 @@ jobs:
         with:
           version: v3.13.0
 
-      # Package Helm charts
+
+      # Fetch the existing gh-pages branch
+      - name: Fetch gh-pages branch
+        run: |
+          git fetch origin gh-pages:gh-pages || echo "gh-pages branch does not exist yet"
+      
+      # Create a temporary directory for existing packages
+      - name: Create temp directory for existing packages
+        run: mkdir -p old-packages
+
+      # Extract existing packages and index.yaml
+      - name: Copy existing packages and index.yaml
+        if: ${{ github.event_name == 'push' }}
+        run: |
+          if [ -d "gh-pages" ]; then
+            cp gh-pages/* old-packages/ || echo "No existing packages found"
+          fi
+
+      # Package new Helm charts
       - name: Package Helm Charts
         run: |
           mkdir -p packaged
@@ -30,12 +48,18 @@ jobs:
             fi
           done
 
-      # Generate index.yaml
+      # Merge old and new packages
+      - name: Merge old and new packages
+        run: |
+          cp old-packages/* packaged/ || echo "No old packages to copy"
+          rm -rf old-packages
+
+      # Generate updated index.yaml
       - name: Generate Helm Repository Index
         run: |
-          helm repo index packaged --url https://${{ github.repository_owner }}.github.io/helm-charts/
+          helm repo index packaged --url https://${{ github.repository_owner }}.github.io/helm-charts/ --merge gh-pages/index.yaml || echo "No existing index.yaml to merge"
 
-      # Publish to GitHub Pages
+      # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
