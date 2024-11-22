@@ -3,40 +3,40 @@ entries:
   general:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-11-22T09:34:09.791783503Z"
+    created: "2024-11-22T09:39:22.903522177Z"
     description: Universal Chart for deploying kubernetes applications
-    digest: 9e40f0cb04802c1d57172ada09495311442860736a6e50938a62f1c669064930
+    digest: 01915643e7607304aa13a174d1d886d037ba5e8e6d3d9a2d3513de106dd9f7be
     maintainers:
     - email: alexander.shelega@gmail.com
       name: Alexander Shelega
     name: general
     urls:
-    - https://github.com/alexandershelega/alexandershelega/helm-charts/general-0.1.7.tgz
+    - https://alexandershelega.github.io/alexandershelega/helm-charts/general-0.1.7.tgz
     version: 0.1.7
   prometheus-configs:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-11-22T09:34:09.792116862Z"
+    created: "2024-11-22T09:39:22.903848514Z"
     description: Prometheus Alert Generator
-    digest: a05811bc3f7986fc793d9c126068950b43993a9c4abd47f878c48ca8c8dfe6b3
+    digest: 004d2470f805bbed431086d20b4e8c41383cef65dba0a65d8d4a1904071ba6ee
     maintainers:
     - email: alexander.shelega@gmail.com
       name: Alexander Shelega
     name: prometheus-configs
     urls:
-    - https://github.com/alexandershelega/alexandershelega/helm-charts/prometheus-configs-0.0.6.tgz
+    - https://alexandershelega.github.io/alexandershelega/helm-charts/prometheus-configs-0.0.6.tgz
     version: 0.0.6
   vm-configs:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-11-22T09:34:09.792420858Z"
+    created: "2024-11-22T09:39:22.904159152Z"
     description: VM Alert/Scrape Generator
-    digest: b286bb56741dbebf634e7670a3b3e9a92686eaf4400dbd0ecdbdc9349d14b7f8
+    digest: dac4ed66de02f0dabfe189a48d2403f48bc354fec173b245f7738fcf0a6d8e3b
     maintainers:
     - email: alexander.shelega@gmail.com
       name: Alexander Shelega
     name: vm-configs
     urls:
-    - https://github.com/alexandershelega/alexandershelega/helm-charts/vm-configs-0.0.4.tgz
+    - https://alexandershelega.github.io/alexandershelega/helm-charts/vm-configs-0.0.4.tgz
     version: 0.0.4
-generated: "2024-11-22T09:34:09.790234085Z"
+generated: "2024-11-22T09:39:22.902745161Z"
