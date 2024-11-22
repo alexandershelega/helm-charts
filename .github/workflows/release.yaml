@@ -33,7 +33,7 @@ jobs:
       # Generate index.yaml
       - name: Generate Helm Repository Index
         run: |
-          helm repo index packaged --url https://${{ github.repository_owner }}.github.io/$GITHUB_REPOSITORY
+          helm repo index packaged --url https://${{ github.repository_owner }}.github.io/helm-charts/
 
       # Publish to GitHub Pages
       - name: Deploy to GitHub Pages
