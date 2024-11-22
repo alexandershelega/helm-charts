@@ -1,0 +1,8 @@
+apiVersion: v2
+name: prometheus-configs
+description: Prometheus Alert Generator
+version: 0.0.6
+appVersion: "1.0.0"
+maintainers:
+- name: Alexander Shelega
+  email: alexander.shelega@gmail.com

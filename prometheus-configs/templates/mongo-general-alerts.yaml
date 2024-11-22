@@ -1,0 +1,143 @@
+{{- $grafana_address := .Values.grafana_address }}
+{{- range $mongo := .Values.mongo }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus: main
+    role: alerting-rules
+  name: mongo-rules-{{ $mongo.server_name }}
+spec:
+  groups:
+    - name: 'MongoDB Uptime Seconds'
+      rules:
+        - alert: 'MongoDB Uptime'
+          expr: avg_over_time(mongodb_instance_uptime_seconds{instance=~"{{ $mongo.server_name }}", mongodb_port=~".+"}[1m]) < 120
+          for: 1m
+          labels:
+            environment: {{ $mongo.environment | default "databases" }}
+            severity: security
+            owner: {{ $mongo.owner | default "devops" }}
+            slack_channel:  {{ $mongo.slack_channel }}             
+            customer: '{{`{{ $labels.monitoring_agent }}`}}'
+          annotations:
+            summary: 'Hostname: {{`{{ $labels.instance }}`}}, MongoPort: {{`{{ $labels.mongodb_port }}`}}, DB: {{`{{ $labels.service_name }}`}}'
+            description: 'MongoDB Server {{`{{ $labels.instance }}`}}:{{`{{ $labels.mongodb_port }}`}} has been restarted'
+            troubleshooting: 'Inform Devops Team'
+        - alert: 'Mongos Uptime'
+          expr: avg_over_time(mongodb_instance_uptime_seconds{instance=~"{{ $mongo.server_name }}", mongos_port=~".+"}[1m]) < 120
+          for: 1m
+          labels:
+            environment: {{ $mongo.environment | default "databases" }}
+            severity: major
+            owner: {{ $mongo.owner | default "devops" }}
+            slack_channel:  {{ $mongo.slack_channel }}             
+            customer: '{{`{{ $labels.monitoring_agent }}`}}'
+          annotations:
+            summary: 'Hostname: {{`{{ $labels.instance }}`}}, MongosPort: {{`{{ $labels.mongodb_port }}`}}'
+            description: 'Mongos Server {{`{{ $labels.instance }}`}}:{{`{{ $labels.mongodb_port }}`}} has been restarted'
+            troubleshooting: 'Inform Devops Team'
+    - name: 'Replicaset'
+      rules:
+        - alert: 'Instance status in replicaset'
+          expr: abs(delta(mongodb_mongod_replset_my_state{instance=~"{{ $mongo.server_name }}",mongodb_port=~".+"}[10m])) != 0
+          for: 2m
+          labels:
+            environment: {{ $mongo.environment | default "databases" }}
+            severity: critical
+            owner: {{ $mongo.owner | default "devops" }}
+            slack_channel:  {{ $mongo.slack_channel }}             
+            customer: '{{`{{ $labels.monitoring_agent }}`}}'
+          annotations:
+            summary: 'Hostname: {{`{{ $labels.instance }}`}}, MongoPort: {{`{{ $labels.mongodb_port }}`}}, DB: {{`{{ $labels.service_name }}`}}'
+            description: '{{`{{ $labels.instance }}`}}:{{`{{ $labels.mongodb_port }}`}} status in replicaset has changed.'
+            troubleshooting: 'Inform Devops Team'
+    - name: 'MongoDB is Down'
+      rules:
+        - alert: 'MongoDB is Down'
+          expr: avg_over_time(mongodb_up{instance=~"{{ $mongo.server_name }}",mongodb_port=~".+"}[1m]) == 0
+          for: 1m
+          labels:
+            environment: {{ $mongo.environment | default "databases" }}
+            severity: security
+            owner: {{ $mongo.owner | default "devops" }}
+            slack_channel:  {{ $mongo.slack_channel }}             
+            customer: '{{`{{ $labels.monitoring_agent }}`}}'
+          annotations:
+            summary: 'Hostname: {{`{{ $labels.instance }}`}}, MongoPort: {{`{{ $labels.mongodb_port }}`}}, DB: {{`{{ $labels.service_name }}`}}'
+            description: 'MongoDB Server {{`{{ $labels.instance }}`}}:{{`{{ $labels.mongodb_port }}`}} is down'
+            troubleshooting: 'Inform Devops Team'
+        - alert: 'Mongos is Down'
+          expr: avg_over_time(mongodb_up{instance=~"{{ $mongo.server_name }}",mongos_port=~".+"}[1m]) == 0
+          for: 1m
+          labels:
+            environment: {{ $mongo.environment | default "databases" }}
+            severity: critical
+            owner: {{ $mongo.owner | default "devops" }}
+            slack_channel:  {{ $mongo.slack_channel }}             
+            customer: '{{`{{ $labels.monitoring_agent }}`}}'
+          annotations:
+            summary: 'Hostname: {{`{{ $labels.instance }}`}}, MongosPort: {{`{{ $labels.mongodb_port }}`}}'
+            description: 'Mongos Server {{`{{ $labels.instance }}`}}:{{`{{ $labels.mongos_port }}`}} is down'
+            troubleshooting: 'Inform Devops Team'
+        - alert: 'MongoDB Open Cursors by Set >= 5'
+          expr: sum(sum(mongodb_mongod_metrics_cursor_open{instance=~"{{ $mongo.server_name }}",state="total"}) by (instance) * on (instance) group_right mongodb_mongod_replset_my_state / mongodb_mongod_replset_my_state) by (set) >= 20
+          for: 1m
+          labels:
+            environment: {{ $mongo.environment | default "databases" }}
+            severity: critical
+            owner: {{ $mongo.owner | default "devops" }}
+            slack_channel:  {{ $mongo.slack_channel }}             
+            customer: '{{`{{ $labels.set }}`}}'
+          annotations:
+            value: '{{`{{ $value }}`}}'
+            summary: '{{`{{ $labels.set }}`}} - <{{  $grafana_address }}/d/ihliGshMk/mongodb-maindbs?viewPanel=25&orgId=1&refresh=1m&from=now-1h&to=now | Dashboard>'
+            description: 'Open Cursors count of {{`{{ $labels.set }}`}} are {{`{{ $value }}`}}'
+            troubleshooting: 'Inform Devops Team'
+        - alert: 'MongoDB Replication Lag by Set'
+          expr: max by (set,service_name) (mongodb:mongodb_replication_lag:seconds{instance=~"{{ $mongo.server_name }}",service_name!~".*_backup"}) > 30
+          for: 20s
+          labels:
+            environment: {{ $mongo.environment | default "databases" }}
+            severity: critical
+            owner: {{ $mongo.owner | default "devops" }}
+            slack_channel:  {{ $mongo.slack_channel }}             
+            summary: '{{`{{ $labels.set }}`}}/{ $labels.service_name }}`}}'
+          annotations:
+            value: '{{`{{ $value }}`}}s'
+            summary: '{{`{{ $labels.set }}`}} - <{{  $grafana_address }}/d/mongodb-replicaset-summary/mongodb-replset-summary?orgId=1&refresh=1m&viewPanel=1571&var-interval=$__auto_interval_interval&var-replset={{`{{ $labels.set }}`}}&var-instance=All&var-service_name={{`{{ $labels.service_name }}`}} | Dashboard>'
+            description: 'MongoDB Replication Lag of set {{`{{ $labels.set }}`}} is {{`{{ $value }}`}} seconds'
+            troubleshooting: 'Inform Devops Team'
+        - alert: 'Backup MongoDB Replication Lag by Set'
+          expr: min by (set,service_name) (mongodb:mongodb_replication_lag:seconds{instance=~"{{ $mongo.server_name }}",service_name=~".*_backup"}) <= 41200 or max by (set,service_name) (mongodb:mongodb_replication_lag:seconds{instance=~"{{ $mongo.server_name }}",service_name=~".*_backup"}) >= 44000
+          for: 20s
+          labels:
+            environment: {{ $mongo.environment | default "databases" }}
+            severity: major
+            owner: {{ $mongo.owner | default "devops" }}
+            slack_channel:  {{ $mongo.slack_channel }}             
+            summary: '{{`{{ $labels.set }}`}}/{{`{{ $labels.service_name }}`}}'
+          annotations:
+            value: '{{`{{ $value }}`}}s'
+            summary: '{{`{{ $labels.set }}`}} - <{{  $grafana_address }}/d/mongodb-replicaset-summary/mongodb-replset-summary?orgId=1&refresh=1m&from=now-1h&to=now&var-interval=$__auto_interval_interval&var-replset={{`{{ $labels.set }}`}}&var-instance=All&var-service_name={{`{{ $labels.service_name }}`}}&viewPanel=1571 | Dashboard>'
+            description: 'Backup MongoDB Replication Lag of set {{`{{ $labels.set }}`}} ls {{`{{ $value }}`}} seconds'
+            troubleshooting: 'Inform Devops Team'
+    - name: "MongoDB disk usage is more than threshold"
+      rules:
+        - alert: "MongoDB disk usage is more than {{ $mongo.disk_tr }}GB"
+          expr: label_replace(netdata_disk_space_GiB_average{instance=~"{{ $mongo.server_name }}", dimension="used", family="/host/storage"}, "family", "$2", "family", "(^/host)(/.*)") > {{ $mongo.disk_tr | default 200 }}
+          for: 1m
+          labels:
+            environment: {{ $mongo.environment | default "databases" }}
+            severity: minor
+            owner: {{ $mongo.owner | default "devops" }}
+            slack_channel:  {{ $mongo.slack_channel }}             
+            customer: '{{`{{ $labels.instance}}`}}:{{`{{ $labels.family }}`}}'
+          annotations:
+            value: '{{`{{ $value | printf "%.2f" }}`}}GB'
+            summary: 'Hostname: {{`{{ $labels.instance }}`}}, Partition: {{`{{ $labels.family }}`}}, - <{{  $grafana_address }}/d/_w2nYUNMk/quick-overview?orgId=1&viewPanel=19&var-host={{`{{ $labels.instance }}`}}&var-process=mongod&from=now-7d&to=now | Dashboard>'
+            description: 'Host {{`{{ $labels.family }}`}} partition is over {{`{{ $value | printf "%.2f" }}`}}GB'
+            troubleshooting: 'Inform Devops Team'
+
+{{- end }}   

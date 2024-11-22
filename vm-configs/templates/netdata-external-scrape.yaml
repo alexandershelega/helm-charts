@@ -1,0 +1,21 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMScrapeConfig
+metadata:
+  labels:
+    vm: main
+  name: netdata-external
+spec:
+  scheme: HTTP
+  scrape_interval: 30s
+  scrapeTimeout: 30s
+  honorLabels: true
+  path: '/api/v1/allmetrics?format=prometheus' 
+  staticConfigs:
+  {{- range $servers := .Values.servers }}
+    - targets: ["{{ $servers.server_ip | default $servers.server_name }}:19999"]
+      labels:
+        instance: {{ $servers.server_name }}
+        env: non-kubernetes 
+  {{- end }}           
+

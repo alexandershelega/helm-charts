@@ -1,0 +1,8 @@
+apiVersion: v2
+name: general
+description: Universal Chart for deploying kubernetes applications
+version: 0.1.7
+appVersion: "1.0.0"
+maintainers:
+- name: Alexander Shelega
+  email: alexander.shelega@gmail.com

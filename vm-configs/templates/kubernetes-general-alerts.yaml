@@ -1,0 +1,284 @@
+
+{{- $grafana_address := .Values.grafana_address }}
+{{- range $kubernetes_clusters := .Values.kubernetes_clusters }}
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  labels:
+    vm: main
+    role: alerting-rules
+  name: kubernetes-cluster-default-rules-{{ $kubernetes_clusters.cluster_name }}
+spec:
+  groups:
+    - name: 'Kubernetes Has New Pod'
+      rules:
+        - alert: 'Kubernetes created new pod'
+          expr: >
+            count by (provider,cluster_name,region,environment,namespace,label_app)
+              (sum by (provider,cluster_name,region,environment,namespace,label_app,pod)
+                (avg_over_time(kube_pod_labels{provider=~"{{ $kubernetes_clusters.provider }}",cluster_name=~"{{ $kubernetes_clusters.cluster_name }}",label_app=~".+"}[2m])) * 0 + on (pod,namespace) group_left
+                sum by (pod,namespace)
+                (time() - max_over_time(kube_pod_created{provider=~"{{ $kubernetes_clusters.provider }}",cluster_name=~"{{ $kubernetes_clusters.cluster_name }}"}[2m])) > 200 < 300) > 0
+          for: 10s
+          labels:
+            environment: {{ $kubernetes_clusters.environment | default "production" }}
+            severity: informational
+            owner: {{ $kubernetes_clusters.owner | default "devops" }}
+            slack_channel: {{ $kubernetes_clusters.slack_channel }}                
+            customer: '{{`{{ $labels.provider }}`}}:{{`{{ $labels.region }}`}}:{{`{{ $labels.cluster_name }}`}}:{{`{{ $labels.label_app }}`}}'
+          annotations:
+            value: '{{`{{ $value }}`}}'
+            summary: '{{`{{ $labels.provider }}`}}/{{`{{ $labels.region }}`}}: {{`{{ $labels.cluster_name }}`}}, Env: {{`{{ $labels.environment }}`}}, App: {{`{{ $labels.label_app }}`}}'
+            description: '{{`{{ $labels.provider }}`}}/{{`{{ $labels.region }}`}}: {{`{{ $labels.cluster_name }}`}}, Env: {{`{{ $labels.environment }}`}}, created {{`{{ $value }}`}} new "{{`{{ $labels.label_app }}`}}" pods'
+            troubleshooting: "No actions need"
+
+
+    - name: 'Kubernetes Node Status'
+      rules:
+        - alert: 'Node Status'
+          expr: >
+            sum by (provider,cluster_name,region,environment,instance)
+              (label_replace
+                (avg_over_time(kube_node_status_condition{provider=~"{{ $kubernetes_clusters.provider }}",cluster_name=~"{{ $kubernetes_clusters.cluster_name }}",condition="Ready",status="false"}[1m]),
+                "instance", "$0", "node", ".*"
+              )
+            ) == 1
+          for: 5m
+          labels:
+            environment: {{ $kubernetes_clusters.environment | default "production" }}
+            severity: security
+            owner: {{ $kubernetes_clusters.owner | default "devops" }}
+            slack_channel: {{ $kubernetes_clusters.slack_channel }}                
+            customer: '{{`{{ $labels.provider }}`}}:{{`{{ $labels.region }}`}}:{{`{{ $labels.cluster_name }}`}}:{{`{{ $labels.environment }}`}}:{{`{{ $labels.instance }}`}}'
+          annotations:
+            value: '{{`{{ $labels.phase }}`}}'
+            summary: '{{`{{ $labels.provider }}`}}/{{`{{ $labels.region }}`}}: {{`{{ $labels.cluster_name }}`}}, Env: {{`{{ $labels.environment }}`}}, Condition: NotReady'
+            description: "Kubernetes node: {{`{{ $labels.instance }}`}} is not Ready"
+            troubleshooting: "Inform Devops Team"
+
+
+    - name: 'Kubernetes PersistentVolumeClaim status'
+      rules:
+        - alert: 'Kubernetes PVC Status'
+          expr: sum(label_replace(avg_over_time(kube_persistentvolumeclaim_status_phase{provider=~"{{ $kubernetes_clusters.provider }}",cluster_name=~"{{ $kubernetes_clusters.cluster_name }}",phase!="Bound"}[1m]), "instance", "$0", "kubernetes_node", ".*")) by (provider,region,cluster_name,instance,namespace,persistentvolumeclaim,phase) == 1
+          for: 5m
+          labels:
+            environment: {{ $kubernetes_clusters.environment | default "production" }}
+            severity: critical
+            owner: {{ $kubernetes_clusters.owner | default "devops" }}
+            slack_channel: {{ $kubernetes_clusters.slack_channel }}                
+            customer: '{{`{{ $labels.provider }}`}}:{{`{{ $labels.region }}`}}:{{`{{ $labels.cluster_name }}`}}:{{`{{ $labels.persistentvolumeclaim }}`}}'
+          annotations:
+            value: '{{`{{ $labels.phase }}`}}'
+            summary: "{{`{{ $labels.provider }}`}}/{{`{{ $labels.region }}`}}: {{`{{ $labels.cluster_name }}`}}, NS: {{`{{ $labels.namespace }}`}}, PVC phase: {{`{{ $labels.phase }}`}}"
+            description: "Kubernetes PVC: {{`{{ $labels.persistentvolumeclaim }}`}} is in {{`{{ $labels.phase }}`}} phase"
+            troubleshooting: 'Inform Devops Team'
+
+
+    - name: 'Volume is almost full (< 10% left)'
+      rules:
+        - alert: 'Kubernetes Volume Out Of Disk Space'
+          expr: sum(avg_over_time(kubelet_volume_stats_available_bytes{provider=~"{{ $kubernetes_clusters.provider }}",cluster_name=~"{{ $kubernetes_clusters.cluster_name }}"}[90s]) * 100 / avg_over_time(kubelet_volume_stats_capacity_bytes{provider=~"{{ $kubernetes_clusters.provider }}",cluster_name=~"{{ $kubernetes_clusters.cluster_name }}"}[90s])) by (provider,region,cluster_name,instance,namespace,persistentvolumeclaim) < 10
+          for: 5m
+          labels:
+            environment: {{ $kubernetes_clusters.environment | default "production" }}
+            severity: critical
+            owner: {{ $kubernetes_clusters.owner | default "devops" }}
+            slack_channel: {{ $kubernetes_clusters.slack_channel }}                
+            customer: '{{`{{ $labels.provider }}`}}:{{`{{ $labels.region }}`}}:{{`{{ $labels.cluster_name }}`}}:{{`{{ $labels.persistentvolumeclaim }}`}}'
+          annotations:
+            value: '{{`{{ $value | printf "%.2f" }}`}}%'
+            summary: '{{`{{ $labels.provider }}`}}/{{`{{ $labels.region }}`}}: {{`{{ $labels.cluster_name }}`}}, Node: {{`{{ $labels.instance }}`}}, NS: {{`{{ $labels.namespace }}`}}, <{{  $grafana_address }}/d/919b92a8e8041bd567af9edab12c840cb/kubernetes-persistent-volumes?orgId=1&var-provider={{`{{ $labels.provider }}`}}&var-cluster_name={{`{{ $labels.cluster_name }}`}}&var-region={{`{{ $labels.region }}`}}&var-environment={{`{{ $labels.environment }}`}}&var-namespace={{`{{ $labels.namespace }}`}}&var-volume={{`{{ $labels.persistentvolumeclaim }}`}}&viewPanel=2&from=now-6h&to=now | Dashboard>'
+            description: 'Kubernetes volume: {{`{{ $labels.persistentvolumeclaim }}`}} is almost full {{`{{ $value | printf "%.2f" }}`}}%'
+            troubleshooting: 'Inform Devops Team'
+
+
+    - name: 'Kubernetes Pod Status'
+      rules:
+        - alert: 'Kubernetes Pod Status'
+          expr: sum(avg_over_time(kube_pod_status_phase{provider=~"{{ $kubernetes_clusters.provider }}",cluster_name=~"{{ $kubernetes_clusters.cluster_name }}",phase=~"Failed|Pending|Unknown"}[90s])) by (provider,region,cluster_name,phase,pod,namespace) == 1
+          for: 5m
+          labels:
+            environment: {{ $kubernetes_clusters.environment | default "production" }}
+            severity: critical
+            owner: {{ $kubernetes_clusters.owner | default "devops" }}
+            slack_channel: {{ $kubernetes_clusters.slack_channel }}                
+            customer: '{{`{{ $labels.provider }}`}}:{{`{{ $labels.region }}`}}:{{`{{ $labels.cluster_name }}`}}:{{`{{ $labels.pod }}`}}'
+          annotations:
+            value: '{{`{{ $labels.phase }}`}}'
+            summary: '{{`{{ $labels.provider }}`}}/{{`{{ $labels.region }}`}}: {{`{{ $labels.cluster_name }}`}}, NS: {{`{{ $labels.namespace }}`}}'
+            description: "Pod: {{`{{ $labels.pod }}`}} of namespace: {{`{{ $labels.namespace }}`}} is in {{`{{ $labels.phase }}`}} state"
+            troubleshooting: 'Inform Devops Team'
+
+
+    - name: 'Kubernetes Deployment Status'
+      rules:
+        - alert: 'Kubernetes Deployment Replicas Unavailable'
+          expr: sum(avg_over_time(kube_deployment_status_replicas_unavailable{provider=~"{{ $kubernetes_clusters.provider }}",cluster_name=~"{{ $kubernetes_clusters.cluster_name }}"}[2m])) by (provider,region,cluster_name,deployment,namespace) >= 1
+          for: 5m
+          labels:
+            environment: {{ $kubernetes_clusters.environment | default "production" }}
+            severity: critical
+            owner: {{ $kubernetes_clusters.owner | default "devops" }}
+            slack_channel: {{ $kubernetes_clusters.slack_channel }}                
+            customer: '{{`{{ $labels.provider }}`}}:{{`{{ $labels.region }}`}}:{{`{{ $labels.cluster_name }}`}}:{{`{{ $labels.deployment }}`}}'
+          annotations:
+            value: '{{`{{ $value | printf "%.0f" }}`}}'
+            summary: '{{`{{ $labels.provider }}`}}/{{`{{ $labels.region }}`}}: {{`{{ $labels.cluster_name }}`}}, NS: {{`{{ $labels.namespace }}`}} - <{{  $grafana_address }}/d/OXFSHPT7z/kubernetes-deployments?orgId=1&var-provider={{`{{ $labels.provider }}`}}&var-cluster_name={{`{{ $labels.cluster_name }}`}}&var-region={{`{{ $labels.region }}`}}&var-environment={{`{{ $labels.environment }}`}}&var-namespace={{`{{ $labels.namespace }}`}}&var-deployment={{`{{ $labels.deployment }}`}} | Dashboard Link>'
+            description: '{{`{{ $value | printf "%.0f" }}`}} replicas of deployment {{`{{ $labels.deployment }}`}} are unavailable'
+            troubleshooting: 'Inform Devops Team'
+
+
+    - name: 'Kubernetes Container restarted more than 2 times during last 10 minutes'
+      rules:
+        - alert: 'Kubernetes Container is Restarting'
+          expr: floor(sum(delta(kube_pod_container_status_restarts_total{provider=~"{{ $kubernetes_clusters.provider }}",cluster_name=~"{{ $kubernetes_clusters.cluster_name }}"}[10m])) by (provider,region,cluster_name,namespace,pod,container)) > 2
+          for: 5m
+          labels:
+            environment: {{ $kubernetes_clusters.environment | default "production" }}
+            severity: critical
+            owner: {{ $kubernetes_clusters.owner | default "devops" }}
+            slack_channel: {{ $kubernetes_clusters.slack_channel }}                
+            customer: '{{`{{ $labels.provider }}`}}:{{`{{ $labels.region }}`}}:{{`{{ $labels.cluster_name }}`}}:{{`{{ $labels.pod }}`}}'
+          annotations:
+            value: '{{`{{ $value }}`}}'
+            summary: '{{`{{ $labels.provider }}`}}/{{`{{ $labels.region }}`}}: {{`{{ $labels.cluster_name }}`}}, NS: {{`{{ $labels.namespace }}`}}, Pod: {{`{{ $labels.pod }}`}}'
+            description: 'Kubernetes container: {{`{{ $labels.container }}`}} is restarted {{`{{ $value }}`}} times in last 10 minutes'
+            troubleshooting: 'Inform Devops Team'
+
+
+    - name: 'Kubernetes Container Status'
+      rules:
+        - alert: 'Kubernetes Container Terminated'
+          expr: >
+            sum by (provider,region,cluster_name,namespace,pod,container,reason)
+              (avg_over_time(kube_pod_container_status_terminated_reason{provider=~"{{ $kubernetes_clusters.provider }}",cluster_name=~"{{ $kubernetes_clusters.cluster_name }}",reason!="Completed"}[2m])) == 1
+          for: 5m
+          labels:
+            environment: {{ $kubernetes_clusters.environment | default "production" }}
+            severity: warning
+            owner:  {{ $kubernetes_clusters.owner | default "devops" }}
+            slack_channel: {{ $kubernetes_clusters.slack_channel }}                 
+            customer: '{{`{{ $labels.provider }}`}}:{{`{{ $labels.region }}`}}:{{`{{ $labels.cluster_name }}`}}:{{`{{ $labels.container }}`}}:{{`{{ $labels.reason }}`}}'
+          annotations:
+            value: '{{`{{ $labels.phase }}`}}'
+            summary: "{{`{{ $labels.provider }}`}}/{{`{{ $labels.region }}`}}: {{`{{ $labels.cluster_name }}`}}, NS: {{`{{ $labels.namespace }}`}}, Pod: {{`{{ $labels.pod }}`}}"
+            description: 'Kubernetes container: {{`{{ $labels.container }}`}} terminated for {{`{{ $labels.reason }}`}} reason'
+            troubleshooting: 'Inform Devops Team'
+
+
+        - alert: 'Kubernetes Container is Waiting'
+          expr: >
+            sum by (provider,region,cluster_name,namespace,pod,container,reason)
+              (avg_over_time(kube_pod_container_status_waiting_reason{provider=~"{{ $kubernetes_clusters.provider }}",cluster_name=~"{{ $kubernetes_clusters.cluster_name }}",reason!="ContainerCreating"}[2m])) == 1
+          for: 5m
+          labels:
+            environment: {{ $kubernetes_clusters.environment | default "production" }}
+            severity: warning
+            owner:  {{ $kubernetes_clusters.owner | default "devops" }}
+            slack_channel: {{ $kubernetes_clusters.slack_channel }}                 
+            customer: '{{`{{ $labels.provider }}`}}:{{`{{ $labels.region }}`}}:{{`{{ $labels.cluster_name }}`}}:{{`{{ $labels.container }}`}}:{{`{{ $labels.reason }}`}}'
+          annotations:
+            value: '{{`{{ $labels.reason }}`}}'
+            summary: '{{`{{ $labels.provider }}`}}/{{`{{ $labels.region }}`}}: {{`{{ $labels.cluster_name }}`}}, NS: {{`{{ $labels.namespace }}`}}, Pod: {{`{{ $labels.pod }}`}}'
+            description: "Kubernetes container: {{`{{ $labels.container }}`}} is waiting for {{`{{ $labels.reason }}`}} reason"
+            troubleshooting: 'Inform Devops Team'
+
+
+    - name: 'Node Memory Usage' # percent
+      rules:
+        - alert: 'Kubernetes Node Memory Usage'
+          expr: >
+            sum(avg_over_time(netdata_system_ram_MiB_average{provider=~"{{ $kubernetes_clusters.provider }}",cluster_name=~"{{ $kubernetes_clusters.cluster_name }}",dimension="used",env!="non-kubernetes"}[90s])) by (provider,region,cluster_name,instance)
+            /
+            sum(avg_over_time(netdata_system_ram_MiB_average{provider=~"{{ $kubernetes_clusters.provider }}",cluster_name=~"{{ $kubernetes_clusters.cluster_name }}",env!="non-kubernetes"}[90s])) by (provider,region,cluster_name,instance) * 100 > 85
+          for: 1m
+          labels:
+            environment: {{ $kubernetes_clusters.environment | default "production" }}
+            severity: major
+            owner:  {{ $kubernetes_clusters.owner | default "devops" }}
+            slack_channel: {{ $kubernetes_clusters.slack_channel }}                 
+            customer: '{{`{{ $labels.provider }}`}}:{{`{{ $labels.region }}`}}:{{`{{ $labels.cluster_name }}`}}:{{`{{ $labels.instance }}`}}'
+          annotations:
+            value: '{{`{{ $value | printf "%.2f" }}`}}%'
+            summary: "{{`{{ $labels.provider }}`}}/{{`{{ $labels.region }}`}}: {{`{{ $labels.cluster_name }}`}}, Node: {{`{{ $labels.instance }}`}}"
+            description: 'Memory usage of node: {{`{{ $labels.kubernetes_node }}`}} is {{`{{ $value | printf "%.2f" }}`}}%'
+            troubleshooting: 'Inform Devops Team'
+
+
+    - name: 'Node CPU Usage' # percent
+      rules:
+        - alert: 'Kubernetes Node CPU Usage'
+          expr: sum(avg_over_time(netdata_system_cpu_percentage_average{provider=~"{{ $kubernetes_clusters.provider }}",cluster_name=~"{{ $kubernetes_clusters.cluster_name }}",dimension!="idle",env!="non-kubernetes"}[90s])) by (provider,region,cluster_name,instance) > 80
+          for: 1m
+          labels:
+            environment: {{ $kubernetes_clusters.environment | default "production" }}
+            severity: major
+            owner:  {{ $kubernetes_clusters.owner | default "devops" }}
+            slack_channel: {{ $kubernetes_clusters.slack_channel }}                 
+            customer: '{{`{{ $labels.provider }}`}}:{{`{{ $labels.region }}`}}:{{`{{ $labels.cluster_name }}`}}:{{`{{ $labels.instance }}`}}'
+          annotations:
+            value: '{{`{{ $value | printf "%.2f" }}`}}%'
+            summary: "{{`{{ $labels.provider }}`}}/{{`{{ $labels.region }}`}}: {{`{{ $labels.cluster_name }}`}}, Node: {{`{{ $labels.instance }}`}}"
+            description: 'CPU usage of node: {{`{{ $labels.instance }}`}} is {{`{{ $value | printf "%.2f" }}`}}%'
+            troubleshooting: 'Inform Devops Team'
+
+
+    - name: 'Kubernetes Node Load Average 1m'
+      rules:
+        - alert: 'Kubernetes Node Load Average'
+          expr: >
+            sum(avg_over_time(netdata_system_load_load_average{provider=~"{{ $kubernetes_clusters.provider }}",cluster_name=~"{{ $kubernetes_clusters.cluster_name }}",dimension="load1",env!="non-kubernetes"}[90s])) by (provider,region,cluster_name,instance)
+                          >(count(sum(avg_over_time(netdata_cpu_cpu_percentage_average [90s])) by (provider,region,cluster_name,instance,chart)) by (provider,region,cluster_name,instance) - 0)
+          for: 5m
+          labels:
+            environment: {{ $kubernetes_clusters.environment | default "production" }}
+            severity: major
+            owner:  {{ $kubernetes_clusters.owner | default "devops" }}
+            slack_channel: {{ $kubernetes_clusters.slack_channel }}                 
+            customer: '{{`{{ $labels.provider }}`}}:{{`{{ $labels.region }}`}}:{{`{{ $labels.cluster_name }}`}}:{{`{{ $labels.instance }}`}}'
+          annotations:
+            value: '{{`{{ $value | printf "%.2f" }}`}}'
+            summary: "{{`{{ $labels.provider }}`}}/{{`{{ $labels.region }}`}}: {{`{{ $labels.cluster_name }}`}}, Node: {{`{{ $labels.instance }}`}}"
+            description: 'Load average of kubernetes node: {{`{{ $labels.instance }}`}} is {{`{{ $value | printf "%.2f" }}`}}'
+            troubleshooting: "Inform Devops Team"
+
+
+    - name: 'Kubernetes Node Drive Usage'  # percent
+      rules:
+        - alert: 'Kubernetes Node Drive Usage'
+          expr: avg_over_time(host_drive_usage_percent{provider=~"{{ $kubernetes_clusters.provider }}",cluster_name=~"{{ $kubernetes_clusters.cluster_name }}",env!="non-kubernetes"}[90s]) > 80
+          for: 5m
+          labels:
+            environment: {{ $kubernetes_clusters.environment | default "production" }}
+            severity: major
+            owner:  {{ $kubernetes_clusters.owner | default "devops" }}
+            slack_channel: {{ $kubernetes_clusters.slack_channel }}                 
+            customer: '{{`{{ $labels.provider }}`}}:{{`{{ $labels.region }}`}}:{{`{{ $labels.cluster_name }}`}}:{{`{{ $labels.instance }}`}}'
+          annotations:
+            value: '{{`{{ $value | printf "%.2f" }}`}}%'
+            summary: "{{`{{ $labels.provider }}`}}/{{`{{ $labels.region }}`}}: {{`{{ $labels.cluster_name }}`}}, Node: {{`{{ $labels.instance }}`}}"
+            description: 'Kubernetes node: {{`{{ $labels.instance }}`}} drive: {{`{{ $labels.family }}`}} usage is {{`{{ $value | printf "%.2f" }}`}}%'
+            troubleshooting: 'Inform Devops Team'
+
+    - name: 'Kubernetes Container is in Creating state for a long time'
+      rules:
+        - alert: 'Kubernetes container is in ContainerCreating state'
+          expr: >
+            sum by (provider,region,cluster_name,namespace,pod,container,reason)
+              (avg_over_time(kube_pod_container_status_waiting_reason{provider=~"{{ $kubernetes_clusters.provider }}",cluster_name=~"{{ $kubernetes_clusters.cluster_name }}",reason="ContainerCreating"}[2m])) == 1
+          for: 10m
+          labels:
+            environment: {{ $kubernetes_clusters.environment | default "production" }}
+            severity: warning
+            owner:  {{ $kubernetes_clusters.owner | default "devops" }}
+            slack_channel: {{ $kubernetes_clusters.slack_channel }}                 
+            customer: '{{`{{ $labels.provider }}`}}:{{`{{ $labels.region }}`}}:{{`{{ $labels.cluster_name }}`}}:{{`{{ $labels.container }}`}}:{{`{{ $labels.reason }}`}}'
+          annotations:
+            value: '{{`{{ $labels.reason }}`}}'
+            summary: "{{`{{ $labels.provider }}`}}/{{`{{ $labels.region }}`}}: {{`{{ $labels.cluster_name }}`}}, NS: {{`{{ $labels.namespace }}`}}, Pod: {{`{{ $labels.pod }}`}}"
+            description: "Kubernetes container: {{`{{ $labels.container }}`}} is in {{`{{ $labels.reason }}`}} state more than 10m"
+            troubleshooting: 'Inform Devops Team'
+{{- end }}             
+
