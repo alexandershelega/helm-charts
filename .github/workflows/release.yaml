@@ -30,7 +30,7 @@ jobs:
         run: |
           mkdir -p old-packages
           if git checkout gh-pages; then
-            cp -r * ./old-packages || echo "No existing packages found"
+            cp -r * ./old-packages/ || echo "No existing packages found"
           fi
           ls -la ./
           ls -la ./old-packages/
