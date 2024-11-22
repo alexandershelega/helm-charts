@@ -32,7 +32,6 @@ jobs:
  .        mkdir test
           copy * ./test
           ls -la ./
-          echo ___________
           ls -la ./test/
 
 
