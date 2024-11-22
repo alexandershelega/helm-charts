@@ -29,6 +29,7 @@ jobs:
           
       - name: Bring files from gh-pages
         run: |
+          ls -la ./
           mkdir -p old-packages
           cp *.tgz old-packages/
 
