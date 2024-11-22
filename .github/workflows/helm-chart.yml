@@ -53,6 +53,9 @@ jobs:
     - name: Authenticate with GHCR
       run: echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ghcr.io --username ${{ github.actor }} --password-stdin
 
+    - name: List Contents of ./packages
+      run: ls -la ./packages
+
     - name: Push All Charts to GHCR
       run: |
         for package in ./packages/*.tgz; do
