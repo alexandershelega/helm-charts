@@ -22,7 +22,7 @@ jobs:
     - name: Lint and Package All Charts
       run: |
         mkdir -p packages
-        for chart in helm-charts/*; do
+        for chart in charts/*; do
           if [ -d "$chart" ]; then
             helm lint "$chart"
             helm package "$chart" --destination ./packages
@@ -90,5 +90,5 @@ jobs:
       env:
         CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        charts_dir: helm-charts
+        charts_dir: charts
 #        release_url: https://github.com/${{ github.repository_owner }}/$GITHUB_REPOSITORY
