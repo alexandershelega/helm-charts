@@ -3,9 +3,9 @@ entries:
   general:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-11-22T09:47:59.637912428Z"
+    created: "2024-11-22T09:49:27.860095813Z"
     description: Universal Chart for deploying kubernetes applications
-    digest: ba5fa59ae0abe134d19388e2cf7df586ee184eddc4e2eb367506e99e5be2c58e
+    digest: b6aefad9cd4037d161d90db4fb08df9812e3d1aa55bd2a09341f984962cda786
     maintainers:
     - email: alexander.shelega@gmail.com
       name: Alexander Shelega
@@ -16,9 +16,9 @@ entries:
   prometheus-configs:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-11-22T09:47:59.638234829Z"
+    created: "2024-11-22T09:49:27.86042052Z"
     description: Prometheus Alert Generator
-    digest: ba3a34881eff60f5fd7df385f3f3b5c38d07d187dbc583e1c3a84feff50235aa
+    digest: d5c5d6ab40e4776092586b7bf0414176e5b1fa5116f7c298d69a554aad3ba5b4
     maintainers:
     - email: alexander.shelega@gmail.com
       name: Alexander Shelega
@@ -29,14 +29,14 @@ entries:
   vm-configs:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-11-22T09:47:59.638526153Z"
+    created: "2024-11-22T09:49:27.860733406Z"
     description: VM Alert/Scrape Generator
-    digest: a9b59a219fbd42a80c337428c52a30fb306a959aac3b8dd0eb2ddae0362e9254
+    digest: 5698a0731b869fe788515e1b8a9e0e708295093221891e43a7a664e3fe0c3b4c
     maintainers:
     - email: alexander.shelega@gmail.com
       name: Alexander Shelega
     name: vm-configs
     urls:
-    - https://alexandershelega.github.io/helm-charts/vm-configs-0.0.3.tgz
-    version: 0.0.3
-generated: "2024-11-22T09:47:59.637172046Z"
+    - https://alexandershelega.github.io/helm-charts/vm-configs-0.0.4.tgz
+    version: 0.0.4
+generated: "2024-11-22T09:49:27.859275958Z"
