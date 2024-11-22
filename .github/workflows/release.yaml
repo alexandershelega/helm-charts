@@ -27,8 +27,14 @@ jobs:
           git fetch origin gh-pages:gh-pages || echo "gh-pages branch does not exist yet"
       
           
-      - name: Bring files from gh-pages
+      - name: Copy specific files from gh-pages
         run: |
+          if git show-ref --quiet refs/heads/gh-pages; then
+            git checkout gh-pages -- ./*.tgz 
+            git checkout main        # Switch back to the main branch
+          else
+            echo "gh-pages branch does not exist; nothing to fetch"
+          fi
           ls -la ./
 
 
