@@ -60,13 +60,13 @@ jq -c '.[] | {name: .name, versions: .versions}' "$SORTED_FILE" | while read -r 
 
   # Start dropdown menu for other versions
   echo "        <select>" >> "$OUTPUT_FILE"
-  echo "          <option>Select another version</option>" >> "$OUTPUT_FILE"
+  echo "          <option value=\"\">Select another version</option>" >> "$OUTPUT_FILE"
   
-  # Add all other versions to the dropdown menu
+  # Add all other versions to the dropdown menu with the same structure
   echo "$chart" | jq -c '.versions[]' | while read -r version_info; do
     version=$(echo "$version_info" | jq -r '.version')
     url=$(echo "$version_info" | jq -r '.urls[0]')
-    echo "          <option value=\"$url\">Version $version</option>" >> "$OUTPUT_FILE"
+    echo "          <option value=\"$url\">Version $version - <a href=\"$url\">Download</a></option>" >> "$OUTPUT_FILE"
   done
   
   # Close dropdown menu
