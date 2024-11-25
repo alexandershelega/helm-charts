@@ -11,7 +11,8 @@
     ul { list-style: none; padding: 0; }
     li { background: #f9f9f9; margin: 10px 0; padding: 15px; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
     li strong { color: #0056b3; }
-    select { margin-top: 10px; padding: 5px; font-size: 14px; }
+    li ul { margin: 10px 0 0; padding-left: 20px; }
+    li ul li { margin: 5px 0; background: none; border: none; box-shadow: none; padding: 5px 0; }
     a { color: #0056b3; text-decoration: none; font-weight: bold; }
     a:hover { text-decoration: underline; }
     footer { text-align: center; margin: 20px 0; color: #555; }
@@ -27,20 +28,17 @@
   <main>
     <ul>
       <li><strong>general</strong> - Latest Version: 0.1.7 - <a href="https://alexandershelega.github.io/helm-charts/general-0.1.7.tgz">Download</a>
-        <select>
-          <option value="">Select an older version</option>
-        </select>
+        <ul>
+        </ul>
       </li>
       <li><strong>prometheus-configs</strong> - Latest Version: 0.0.6 - <a href="https://alexandershelega.github.io/helm-charts/prometheus-configs-0.0.6.tgz">Download</a>
-        <select>
-          <option value="">Select an older version</option>
-        </select>
+        <ul>
+        </ul>
       </li>
       <li><strong>vm-configs</strong> - Latest Version: 0.0.4 - <a href="https://alexandershelega.github.io/helm-charts/vm-configs-0.0.4.tgz">Download</a>
-        <select>
-          <option value="">Select an older version</option>
-          <option value="https://alexandershelega.github.io/helm-charts/vm-configs-0.0.3.tgz">vm-configs - Version: 0.0.3</option>
-        </select>
+        <ul>
+          <li><strong>vm-configs</strong> - Version: 0.0.3 - <a href="https://alexandershelega.github.io/helm-charts/vm-configs-0.0.3.tgz">Download</a></li>
+        </ul>
       </li>
     </ul>
   </main>
