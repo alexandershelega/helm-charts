@@ -2,8 +2,8 @@
 
 # Create the index.html file
 OUTPUT_DIR="packaged"
-mkdir -p "$OUTPUT_DIR" || true
-OUTPUT_FILE="$OUTPUT_DIR/index.html"
+cd packaged
+OUTPUT_FILE="index.html"
 
 # Start writing the HTML file
 cat <<EOF > "$OUTPUT_FILE"
