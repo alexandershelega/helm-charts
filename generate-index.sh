@@ -1,9 +1,12 @@
 #!/bin/bash
 
-# Create the index.html file
+# Define input and output paths
 OUTPUT_DIR="packaged"
-mkdir -p "$OUTPUT_DIR"
+INPUT_FILE="$OUTPUT_DIR/index.yaml"
 OUTPUT_FILE="$OUTPUT_DIR/index.html"
+
+# Ensure the output directory exists
+mkdir -p "$OUTPUT_DIR"
 
 # Start writing the HTML file
 cat <<EOF > "$OUTPUT_FILE"
@@ -35,25 +38,19 @@ cat <<EOF > "$OUTPUT_FILE"
 EOF
 
 # Parse index.yaml to extract chart names and latest versions
-declare -A latest_versions
-chart_name=""
-version=""
 while IFS= read -r line; do
-  if [[ "$line" == "- name:"* ]]; then
-    chart_name=$(echo "$line" | awk '{print $2}')
-  elif [[ "$line" == "  version:"* ]]; then
-    version=$(echo "$line" | awk '{print $2}')
-    # Update the latest version for this chart
-    if [[ -z "${latest_versions[$chart_name]}" || "$version" > "${latest_versions[$chart_name]}" ]]; then
-      latest_versions["$chart_name"]="$version"
-    fi
+  # Check for chart name
+  if [[ "$line" =~ ^[[:space:]]+([a-zA-Z0-9_-]+):$ ]]; then
+    chart_name="${BASH_REMATCH[1]}"
   fi
-done < "$OUTPUT_DIR/index.yaml"
-
-# Generate HTML list items for the latest versions
-for chart in "${!latest_versions[@]}"; do
-  echo "      <li><strong>$chart</strong> - Latest Version: ${latest_versions[$chart]}</li>" >> "$OUTPUT_FILE"
-done
+  
+  # Check for chart version
+  if [[ "$line" =~ ^[[:space:]]+version:[[:space:]](.+)$ ]]; then
+    version="${BASH_REMATCH[1]}"
+    # Append the chart information to the HTML file
+    echo "      <li><strong>$chart_name</strong> - Latest Version: $version</li>" >> "$OUTPUT_FILE"
+  fi
+done < "$INPUT_FILE"
 
 # Finish the HTML file
 cat <<EOF >> "$OUTPUT_FILE"
