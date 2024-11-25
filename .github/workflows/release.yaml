@@ -62,21 +62,42 @@ jobs:
         run: |
           helm repo index packaged --url https://${{ github.repository_owner }}.github.io/helm-charts/ --merge gh-pages/index.yaml || echo "No existing index.yaml to merge"
 
-      - name: Generate index.html for Helm Repository
+      - name: Generate a modern index.html for Helm Repository
         run: |
           echo "<!DOCTYPE html>" > packaged/index.html
           echo "<html>" >> packaged/index.html
-          echo "<head><title>Helm Repository</title></head>" >> packaged/index.html
+          echo "<head>" >> packaged/index.html
+          echo "  <title>Helm Repository</title>" >> packaged/index.html
+          echo "  <style>" >> packaged/index.html
+          echo "    body { font-family: 'Roboto', Arial, sans-serif; margin: 0; padding: 0; background: #ffffff; color: #333; }" >> packaged/index.html
+          echo "    header { background-color: #0056b3; color: #fff; padding: 20px; text-align: center; }" >> packaged/index.html
+          echo "    header h1 { margin: 0; font-size: 2.5em; }" >> packaged/index.html
+          echo "    header p { font-size: 1em; margin: 10px 0 0; }" >> packaged/index.html
+          echo "    main { padding: 20px; max-width: 800px; margin: auto; }" >> packaged/index.html
+          echo "    ul { list-style: none; padding: 0; }" >> packaged/index.html
+          echo "    li { background: #f9f9f9; margin: 10px 0; padding: 15px; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }" >> packaged/index.html
+          echo "    li strong { color: #0056b3; }" >> packaged/index.html
+          echo "    footer { text-align: center; margin: 20px 0; color: #555; }" >> packaged/index.html
+          echo "    footer a { color: #0056b3; text-decoration: none; font-weight: bold; }" >> packaged/index.html
+          echo "    footer a:hover { text-decoration: underline; }" >> packaged/index.html
+          echo "  </style>" >> packaged/index.html
+          echo "</head>" >> packaged/index.html
           echo "<body>" >> packaged/index.html
-          echo "<h1>Helm Repository</h1>" >> packaged/index.html
-          echo "<p>This repository contains the following Helm charts:</p>" >> packaged/index.html
-          echo "<ul>" >> packaged/index.html
+          echo "  <header>" >> packaged/index.html
+          echo "    <h1>Helm Repository</h1>" >> packaged/index.html
+          echo "    <p>Discover the available Helm charts and their versions</p>" >> packaged/index.html
+          echo "  </header>" >> packaged/index.html
+          echo "  <main>" >> packaged/index.html
+          echo "    <ul>" >> packaged/index.html
           cat packaged/index.yaml | grep -E "name:|version:" | awk '
             /name:/ {name=$2}
-            /version:/ {print "<li>" name " - Version: " $2 "</li>"}
+            /version:/ {print "      <li><strong>" name "</strong> - Version: " $2 "</li>"}
           ' >> packaged/index.html
-          echo "</ul>" >> packaged/index.html
-          echo "<p>Index File: <a href='index.yaml'>index.yaml</a></p>" >> packaged/index.html
+          echo "    </ul>" >> packaged/index.html
+          echo "  </main>" >> packaged/index.html
+          echo "  <footer>" >> packaged/index.html
+          echo "    <p>Index File: <a href='index.yaml'>index.yaml</a></p>" >> packaged/index.html
+          echo "  </footer>" >> packaged/index.html
           echo "</body>" >> packaged/index.html
           echo "</html>" >> packaged/index.html
 
