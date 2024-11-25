@@ -39,32 +39,36 @@ cat <<EOF > "$OUTPUT_FILE"
     <ul>
 EOF
 
-# Parse index.yaml to extract chart names, versions, and URLs
+# Process the entries section of the YAML
 chart_name=""
 version=""
 url=""
+
 while IFS= read -r line; do
   # Check for chart name
-  if [[ "$line" =~ ^[[:space:]]+name:[[:space:]](.+)$ ]]; then
+  if [[ "$line" =~ ^[[:space:]]+([a-zA-Z0-9_-]+):$ ]]; then
+    # Store chart name and reset variables
     chart_name="${BASH_REMATCH[1]}"
+    version=""
+    url=""
   fi
 
-  # Check for chart version
+  # Check for version
   if [[ "$line" =~ ^[[:space:]]+version:[[:space:]](.+)$ ]]; then
     version="${BASH_REMATCH[1]}"
   fi
 
-  # Check for chart URL
+  # Check for URL
   if [[ "$line" =~ ^[[:space:]]+-[[:space:]](https://.+\.tgz)$ ]]; then
     url="${BASH_REMATCH[1]}"
-    # Only append to the HTML if we have all details
-    if [[ -n "$chart_name" && -n "$version" && -n "$url" ]]; then
-      echo "      <li><strong>$chart_name</strong> - Version: $version - <a href=\"$url\">Download</a></li>" >> "$OUTPUT_FILE"
-      # Reset variables to ensure the next entry is clean
-      chart_name=""
-      version=""
-      url=""
-    fi
+  fi
+
+  # If all details are available, add the chart to the HTML
+  if [[ -n "$chart_name" && -n "$version" && -n "$url" ]]; then
+    echo "      <li><strong>$chart_name</strong> - Version: $version - <a href=\"$url\">Download</a></li>" >> "$OUTPUT_FILE"
+    # Reset version and URL to prepare for next entry
+    version=""
+    url=""
   fi
 done < "$INPUT_FILE"
 
