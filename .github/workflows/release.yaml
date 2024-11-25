@@ -46,7 +46,7 @@ jobs:
           mkdir -p packaged
           for chart in charts/*; do
             if [ -d "$chart" ]; then
-              helm package "$chart" -d packaged/
+              helm package "$chart" -d packaged/packages/
             fi
           done
 
@@ -54,7 +54,7 @@ jobs:
       - name: Merge old and new packages
         run: |
           ls -la ./
-          cp old-packages/* packaged/ || echo "No old packages to copy"
+          cp old-packages/* packaged/packages/ || echo "No old packages to copy"
           rm -rf old-packages
 
       # Generate updated index.yaml
