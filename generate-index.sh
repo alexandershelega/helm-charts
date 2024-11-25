@@ -61,8 +61,8 @@ jq -c '.[] | {name: .name, versions: .versions}' "$SORTED_FILE" | while read -r 
   echo "      <li><strong>$chart_name</strong> - Latest Version: $latest_version - <a href=\"$latest_url\">Download</a>" >> "$OUTPUT_FILE"
 
   # Add installation instructions for the latest version
-  echo "        <pre>helm repo add $chart_name https://alexandershelega.github.io/helm-charts/</pre>" >> "$OUTPUT_FILE"
-  echo "        <pre>helm install $chart_name $chart_name/$chart_name --version $latest_version</pre>" >> "$OUTPUT_FILE"
+  echo "        <pre>helm repo add general https://alexandershelega.github.io/helm-charts/</pre>" >> "$OUTPUT_FILE"
+  echo "        <pre>helm install $chart_name general/$chart_name --version $latest_version</pre>" >> "$OUTPUT_FILE"
 
   # Add dropdown menu for older versions
   echo "        <details>" >> "$OUTPUT_FILE"
@@ -74,7 +74,7 @@ jq -c '.[] | {name: .name, versions: .versions}' "$SORTED_FILE" | while read -r 
     url=$(echo "$version_info" | jq -r '.urls[0]')
     if [[ "$version" != "$latest_version" ]]; then
       echo "          <p><strong>$chart_name</strong> - Version: $version - <a href=\"$url\">Download</a></p>" >> "$OUTPUT_FILE"
-      echo "          <pre>helm install $chart_name $chart_name/$chart_name --version $version</pre>" >> "$OUTPUT_FILE"
+      echo "          <pre>helm install $chart_name general/$chart_name --version $version</pre>" >> "$OUTPUT_FILE"
     fi
   done
 
