@@ -8,6 +8,12 @@ OUTPUT_FILE="$OUTPUT_DIR/index.html"
 # Ensure the output directory exists
 mkdir -p "$OUTPUT_DIR"
 
+# Create a temporary sorted file
+SORTED_FILE="$OUTPUT_DIR/sorted_index.yaml"
+
+# Sort the index.yaml entries by chart name and version
+yq -o=json '.' "$INPUT_FILE" | jq '.entries | to_entries | map({name: .key, versions: .value | sort_by(.version) | reverse})' > "$SORTED_FILE"
+
 # Start writing the HTML file
 cat <<EOF > "$OUTPUT_FILE"
 <!DOCTYPE html>
@@ -39,38 +45,10 @@ cat <<EOF > "$OUTPUT_FILE"
     <ul>
 EOF
 
-# Process the entries section of the YAML
-chart_name=""
-version=""
-url=""
-
-while IFS= read -r line; do
-  # Check for chart name
-  if [[ "$line" =~ ^[[:space:]]+([a-zA-Z0-9_-]+):$ ]]; then
-    # Store chart name and reset variables
-    chart_name="${BASH_REMATCH[1]}"
-    version=""
-    url=""
-  fi
-
-  # Check for version
-  if [[ "$line" =~ ^[[:space:]]+version:[[:space:]](.+)$ ]]; then
-    version="${BASH_REMATCH[1]}"
-  fi
-
-  # Check for URL
-  if [[ "$line" =~ ^[[:space:]]+-[[:space:]](https://.+\.tgz)$ ]]; then
-    url="${BASH_REMATCH[1]}"
-  fi
-
-  # If all details are available, add the chart to the HTML
-  if [[ -n "$chart_name" && -n "$version" && -n "$url" ]]; then
-    echo "      <li><strong>$chart_name</strong> - Version: $version - <a href=\"$url\">Download</a></li>" >> "$OUTPUT_FILE"
-    # Reset version and URL to prepare for next entry
-    version=""
-    url=""
-  fi
-done < "$INPUT_FILE"
+# Generate HTML for the latest version of each chart
+jq -r '.[] | .name as $name | .versions[0] | "\($name) \(.version) \(.urls[0])"' "$SORTED_FILE" | while read -r name version url; do
+  echo "      <li><strong>$name</strong> - Version: $version - <a href=\"$url\">Download</a></li>" >> "$OUTPUT_FILE"
+done
 
 # Finish the HTML file
 cat <<EOF >> "$OUTPUT_FILE"
