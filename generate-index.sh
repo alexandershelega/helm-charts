@@ -61,8 +61,7 @@ jq -c '.[] | {name: .name, versions: .versions}' "$SORTED_FILE" | while read -r 
   values_url="https://github.com/alexandershelega/helm-charts/blob/main/charts/$chart_name/values.yaml"
 
   # Add chart with the latest version
-  echo "      <li><strong>$chart_name</strong> - Latest Version: $latest_version - <a href=\"$latest_url\">Download</a>" >> "$OUTPUT_FILE"
-  echo "        <p><a href=\"$values_url\">View values.yaml</a></p>" >> "$OUTPUT_FILE"
+  echo "      <li><strong>$chart_name</strong> - Latest Version: $latest_version - <a href=\"$latest_url\">Download</a> - <a href=\"$values_url\">values.yaml</a>" >> "$OUTPUT_FILE"
 
   # Add installation instructions for the latest version
   echo "        <pre>helm repo add general https://alexandershelega.github.io/helm-charts/</pre>" >> "$OUTPUT_FILE"
