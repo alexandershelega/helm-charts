@@ -33,6 +33,7 @@ cat <<EOF > "$OUTPUT_FILE"
     summary { cursor: pointer; font-weight: bold; color: #888; } /* Grey color for Show Older Versions */
     a { color: #0056b3; text-decoration: none; font-weight: bold; }
     a:hover { text-decoration: underline; }
+    pre { background: #f9f9f9; padding: 10px; border-radius: 5px; border: 1px solid #ddd; overflow: auto; }
     footer { text-align: center; margin: 20px 0; color: #555; }
     footer a { color: #0056b3; text-decoration: none; font-weight: bold; }
     footer a:hover { text-decoration: underline; }
@@ -59,6 +60,10 @@ jq -c '.[] | {name: .name, versions: .versions}' "$SORTED_FILE" | while read -r 
   # Add chart with the latest version
   echo "      <li><strong>$chart_name</strong> - Latest Version: $latest_version - <a href=\"$latest_url\">Download</a>" >> "$OUTPUT_FILE"
 
+  # Add installation instructions for the latest version
+  echo "        <pre>helm repo add $chart_name https://alexandershelega.github.io/helm-charts/</pre>" >> "$OUTPUT_FILE"
+  echo "        <pre>helm install $chart_name $chart_name/$chart_name --version $latest_version</pre>" >> "$OUTPUT_FILE"
+
   # Add dropdown menu for older versions
   echo "        <details>" >> "$OUTPUT_FILE"
   echo "          <summary>Show Older Versions</summary>" >> "$OUTPUT_FILE"
@@ -69,6 +74,7 @@ jq -c '.[] | {name: .name, versions: .versions}' "$SORTED_FILE" | while read -r 
     url=$(echo "$version_info" | jq -r '.urls[0]')
     if [[ "$version" != "$latest_version" ]]; then
       echo "          <p><strong>$chart_name</strong> - Version: $version - <a href=\"$url\">Download</a></p>" >> "$OUTPUT_FILE"
+      echo "          <pre>helm install $chart_name $chart_name/$chart_name --version $version</pre>" >> "$OUTPUT_FILE"
     fi
   done
 
