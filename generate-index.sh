@@ -29,8 +29,8 @@ cat <<EOF > "$OUTPUT_FILE"
     ul { list-style: none; padding: 0; }
     li { background: #f9f9f9; margin: 10px 0; padding: 15px; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
     li strong { color: #0056b3; }
-    li ul { margin: 10px 0 0; padding-left: 20px; }
-    li ul li { margin: 5px 0; background: none; border: none; box-shadow: none; padding: 5px 0; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; font-weight: bold; color: #0056b3; }
     a { color: #0056b3; text-decoration: none; font-weight: bold; }
     a:hover { text-decoration: underline; }
     footer { text-align: center; margin: 20px 0; color: #555; }
@@ -59,20 +59,21 @@ jq -c '.[] | {name: .name, versions: .versions}' "$SORTED_FILE" | while read -r 
   # Add chart with the latest version
   echo "      <li><strong>$chart_name</strong> - Latest Version: $latest_version - <a href=\"$latest_url\">Download</a>" >> "$OUTPUT_FILE"
 
-  # Add nested list for older versions
-  echo "        <ul>" >> "$OUTPUT_FILE"
+  # Add dropdown menu for older versions
+  echo "        <details>" >> "$OUTPUT_FILE"
+  echo "          <summary>Show Older Versions</summary>" >> "$OUTPUT_FILE"
 
-  # Add all other versions to the nested list
+  # Add all other versions inside the dropdown
   echo "$chart" | jq -c '.versions[]' | while read -r version_info; do
     version=$(echo "$version_info" | jq -r '.version')
     url=$(echo "$version_info" | jq -r '.urls[0]')
     if [[ "$version" != "$latest_version" ]]; then
-      echo "          <li><strong>$chart_name</strong> - Version: $version - <a href=\"$url\">Download</a></li>" >> "$OUTPUT_FILE"
+      echo "          <p><strong>$chart_name</strong> - Version: $version - <a href=\"$url\">Download</a></p>" >> "$OUTPUT_FILE"
     fi
   done
 
-  # Close the nested list
-  echo "        </ul>" >> "$OUTPUT_FILE"
+  # Close the dropdown menu
+  echo "        </details>" >> "$OUTPUT_FILE"
   echo "      </li>" >> "$OUTPUT_FILE"
 done
 
