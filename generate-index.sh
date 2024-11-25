@@ -23,6 +23,8 @@ cat <<EOF > "$OUTPUT_FILE"
     ul { list-style: none; padding: 0; }
     li { background: #f9f9f9; margin: 10px 0; padding: 15px; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
     li strong { color: #0056b3; }
+    a { color: #0056b3; text-decoration: none; font-weight: bold; }
+    a:hover { text-decoration: underline; }
     footer { text-align: center; margin: 20px 0; color: #555; }
     footer a { color: #0056b3; text-decoration: none; font-weight: bold; }
     footer a:hover { text-decoration: underline; }
@@ -37,18 +39,23 @@ cat <<EOF > "$OUTPUT_FILE"
     <ul>
 EOF
 
-# Parse index.yaml to extract chart names and latest versions
+# Parse index.yaml to extract chart names, versions, and URLs
 while IFS= read -r line; do
   # Check for chart name
-  if [[ "$line" =~ ^[[:space:]]+([a-zA-Z0-9_-]+):$ ]]; then
+  if [[ "$line" =~ ^[[:space:]]+name:[[:space:]](.+)$ ]]; then
     chart_name="${BASH_REMATCH[1]}"
   fi
-  
+
   # Check for chart version
   if [[ "$line" =~ ^[[:space:]]+version:[[:space:]](.+)$ ]]; then
     version="${BASH_REMATCH[1]}"
+  fi
+
+  # Check for chart URL
+  if [[ "$line" =~ ^[[:space:]]+-[[:space:]](https://.+\.tgz)$ ]]; then
+    url="${BASH_REMATCH[1]}"
     # Append the chart information to the HTML file
-    echo "      <li><strong>$chart_name</strong> - Latest Version: $version</li>" >> "$OUTPUT_FILE"
+    echo "      <li><strong>$chart_name</strong> - Version: $version - <a href=\"$url\">Download</a></li>" >> "$OUTPUT_FILE"
   fi
 done < "$INPUT_FILE"
 
