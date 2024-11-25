@@ -65,8 +65,7 @@ jobs:
 
       - name: Generate index.html for Helm Repository
         run: |
-          sudo apt update 
-          sudo apt install yq -y
+          snap install yq
           chmod +x generate-index.sh
           ./generate-index.sh
 
