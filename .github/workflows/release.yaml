@@ -63,7 +63,8 @@ jobs:
           helm repo index packaged --url https://${{ github.repository_owner }}.github.io/helm-charts/ --merge gh-pages/index.yaml || echo "No existing index.yaml to merge"
 
 
-      - name: Generate a modern index.html for Helm Repository with dropdowns
+
+      - name: Generate a modern index.html for Helm Repository
         run: |
           echo "<!DOCTYPE html>" > packaged/index.html
           echo "<html>" >> packaged/index.html
@@ -78,8 +79,6 @@ jobs:
           echo "    ul { list-style: none; padding: 0; }" >> packaged/index.html
           echo "    li { background: #f9f9f9; margin: 10px 0; padding: 15px; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }" >> packaged/index.html
           echo "    li strong { color: #0056b3; }" >> packaged/index.html
-          echo "    .dropdown { margin-top: 10px; }" >> packaged/index.html
-          echo "    select { width: 100%; padding: 10px; font-size: 14px; border: 1px solid #ddd; border-radius: 5px; background-color: #fff; }" >> packaged/index.html
           echo "    footer { text-align: center; margin: 20px 0; color: #555; }" >> packaged/index.html
           echo "    footer a { color: #0056b3; text-decoration: none; font-weight: bold; }" >> packaged/index.html
           echo "    footer a:hover { text-decoration: underline; }" >> packaged/index.html
@@ -88,23 +87,19 @@ jobs:
           echo "<body>" >> packaged/index.html
           echo "  <header>" >> packaged/index.html
           echo "    <h1>Helm Repository</h1>" >> packaged/index.html
-          echo "    <p>Discover the latest and previous versions of Helm charts</p>" >> packaged/index.html
+          echo "    <p>Discover the latest Helm charts and their versions</p>" >> packaged/index.html
           echo "  </header>" >> packaged/index.html
           echo "  <main>" >> packaged/index.html
           echo "    <ul>" >> packaged/index.html
           awk '
             BEGIN { chart="" }
-            /- name:/ { 
-              if (chart != "") print "</select></div>"; 
-              chart=$2; 
-              print "      <li><strong>" chart "</strong> - Latest Version: <span id=\"" chart "\"></span></li>"; 
-              print "      <div class=\"dropdown\"><select><option>Select a version:</option>";
-            }
+            /- name:/ { chart=$2 }
             /version:/ { 
-              print "        <option value=\"" $2 "\">" $2 "</option>";
-              if (seen[chart] == "") { seen[chart]=$2; print "<script>document.getElementById('" chart "').textContent='" $2 "'</script>"; }
+              if (!seen[chart]) { 
+                seen[chart]=$2; 
+                print "      <li><strong>" chart "</strong> - Version: " $2 "</li>" 
+              } 
             }
-            END { print "</select></div>"; }
           ' packaged/index.yaml >> packaged/index.html
           echo "    </ul>" >> packaged/index.html
           echo "  </main>" >> packaged/index.html
@@ -113,7 +108,6 @@ jobs:
           echo "  </footer>" >> packaged/index.html
           echo "</body>" >> packaged/index.html
           echo "</html>" >> packaged/index.html
-
 
       # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
