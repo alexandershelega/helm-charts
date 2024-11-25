@@ -63,7 +63,6 @@ jobs:
           helm repo index packaged --url https://${{ github.repository_owner }}.github.io/helm-charts/ --merge gh-pages/index.yaml || echo "No existing index.yaml to merge"
 
 
-
       - name: Generate a modern index.html for Helm Repository
         run: |
           echo "<!DOCTYPE html>" > packaged/index.html
@@ -87,20 +86,14 @@ jobs:
           echo "<body>" >> packaged/index.html
           echo "  <header>" >> packaged/index.html
           echo "    <h1>Helm Repository</h1>" >> packaged/index.html
-          echo "    <p>Discover the latest Helm charts and their versions</p>" >> packaged/index.html
+          echo "    <p>Discover the available Helm charts and their versions</p>" >> packaged/index.html
           echo "  </header>" >> packaged/index.html
           echo "  <main>" >> packaged/index.html
           echo "    <ul>" >> packaged/index.html
-          awk '
-            BEGIN { chart="" }
-            /- name:/ { chart=$2 }
-            /version:/ { 
-              if (!seen[chart]) { 
-                seen[chart]=$2; 
-                print "      <li><strong>" chart "</strong> - Version: " $2 "</li>" 
-              } 
-            }
-          ' packaged/index.yaml >> packaged/index.html
+          cat packaged/index.yaml | grep -E "name:|version:" | awk '
+            /name:/ {name=$2}
+            /version:/ {print "      <li><strong>" name "</strong> - Version: " $2 "</li>"}
+          ' >> packaged/index.html
           echo "    </ul>" >> packaged/index.html
           echo "  </main>" >> packaged/index.html
           echo "  <footer>" >> packaged/index.html
