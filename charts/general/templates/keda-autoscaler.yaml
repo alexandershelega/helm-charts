@@ -15,7 +15,7 @@ metadata:
 spec:
   scaleTargetRef:
 {{- if eq .Values.keda.apiVersion "keda.k8s.io/v1alpha1" }}
-    deploymentName: {{ include "general.name" . }}
+    deploymentName: Deployment
 {{- else if eq .Values.keda.apiVersion "keda.sh/v1alpha1" }}
     name: {{ include "general.name" . }}
 {{- end }}
