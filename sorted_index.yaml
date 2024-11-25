@@ -5,7 +5,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2024-11-25T09:44:30.612743035Z",
+        "created": "2024-11-25T10:00:40.313593741Z",
         "description": "Universal Chart for deploying kubernetes applications",
         "digest": "a435921ee4b8e9394ddeed2a54320607c37aa3478eaa6a7fd95b6e5e6669420b",
         "maintainers": [
@@ -16,7 +16,7 @@
         ],
         "name": "general",
         "urls": [
-          "https://alexandershelega.github.io/helm-charts/general-0.1.7.tgz"
+          "https://alexandershelega.github.io/helm-charts/packages/general-0.1.7.tgz"
         ],
         "version": "0.1.7"
       }
@@ -28,7 +28,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2024-11-25T09:44:30.613056992Z",
+        "created": "2024-11-25T10:00:40.313907088Z",
         "description": "Prometheus Alert Generator",
         "digest": "ded7737d35aedd091bce1625aaf1fe617b3c4a2c19012db5abde0a9d3680fd74",
         "maintainers": [
@@ -39,7 +39,7 @@
         ],
         "name": "prometheus-configs",
         "urls": [
-          "https://alexandershelega.github.io/helm-charts/prometheus-configs-0.0.6.tgz"
+          "https://alexandershelega.github.io/helm-charts/packages/prometheus-configs-0.0.6.tgz"
         ],
         "version": "0.0.6"
       }
@@ -51,7 +51,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2024-11-25T09:44:30.613681748Z",
+        "created": "2024-11-25T10:00:40.314518173Z",
         "description": "VM Alert/Scrape Generator",
         "digest": "c9352d9cce4af79904884f5a8cbdb82478520d16c7e12b8a1233423510d56f58",
         "maintainers": [
@@ -62,14 +62,14 @@
         ],
         "name": "vm-configs",
         "urls": [
-          "https://alexandershelega.github.io/helm-charts/vm-configs-0.0.4.tgz"
+          "https://alexandershelega.github.io/helm-charts/packages/vm-configs-0.0.4.tgz"
         ],
         "version": "0.0.4"
       },
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2024-11-25T09:44:30.613361981Z",
+        "created": "2024-11-25T10:00:40.314221086Z",
         "description": "VM Alert/Scrape Generator",
         "digest": "e6d77ceaed6b41a2ed86516473c2c4212e90749ed8416f6b391b511ad4bb9cc4",
         "maintainers": [
@@ -80,7 +80,7 @@
         ],
         "name": "vm-configs",
         "urls": [
-          "https://alexandershelega.github.io/helm-charts/vm-configs-0.0.3.tgz"
+          "https://alexandershelega.github.io/helm-charts/packages/vm-configs-0.0.3.tgz"
         ],
         "version": "0.0.3"
       }
