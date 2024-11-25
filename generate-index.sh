@@ -29,7 +29,6 @@ cat <<EOF > "$OUTPUT_FILE"
     ul { list-style: none; padding: 0; }
     li { background: #f9f9f9; margin: 10px 0; padding: 15px; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
     li strong { color: #0056b3; }
-    select { margin-top: 10px; padding: 5px; font-size: 14px; }
     a { color: #0056b3; text-decoration: none; font-weight: bold; }
     a:hover { text-decoration: underline; }
     footer { text-align: center; margin: 20px 0; color: #555; }
@@ -46,7 +45,7 @@ cat <<EOF > "$OUTPUT_FILE"
     <ul>
 EOF
 
-# Generate HTML for each chart and its versions
+# Generate HTML for each chart with the latest version
 jq -c '.[] | {name: .name, versions: .versions}' "$SORTED_FILE" | while read -r chart; do
   # Extract chart name
   chart_name=$(echo "$chart" | jq -r '.name')
@@ -56,22 +55,7 @@ jq -c '.[] | {name: .name, versions: .versions}' "$SORTED_FILE" | while read -r 
   latest_url=$(echo "$chart" | jq -r '.versions[0].urls[0]')
 
   # Add chart with the latest version
-  echo "      <li><strong>$chart_name</strong> - Latest Version: $latest_version - <a href=\"$latest_url\">Download</a>" >> "$OUTPUT_FILE"
-
-  # Start dropdown menu for other versions
-  echo "        <select>" >> "$OUTPUT_FILE"
-  echo "          <option value=\"\">Select another version</option>" >> "$OUTPUT_FILE"
-  
-  # Add all other versions to the dropdown menu with the same structure
-  echo "$chart" | jq -c '.versions[]' | while read -r version_info; do
-    version=$(echo "$version_info" | jq -r '.version')
-    url=$(echo "$version_info" | jq -r '.urls[0]')
-    echo "          <option value=\"$url\">Version $version - <a href=\"$url\">Download</a></option>" >> "$OUTPUT_FILE"
-  done
-  
-  # Close dropdown menu
-  echo "        </select>" >> "$OUTPUT_FILE"
-  echo "      </li>" >> "$OUTPUT_FILE"
+  echo "      <li><strong>$chart_name</strong> - Version: $latest_version - <a href=\"$latest_url\">Download</a></li>" >> "$OUTPUT_FILE"
 done
 
 # Finish the HTML file
