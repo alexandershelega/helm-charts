@@ -47,7 +47,7 @@ spec:
           for: 5m
           labels:
             environment: {{ $kubernetes_clusters.environment | default "production" }}
-            severity: high
+            severity: critical
             owner: {{ $kubernetes_clusters.owner | default "devops" }}
             slack_channel: {{ $kubernetes_clusters.slack_channel }}                
             customer: '{{`{{ $labels.provider }}`}}:{{`{{ $labels.region }}`}}:{{`{{ $labels.cluster_name }}`}}:{{`{{ $labels.environment }}`}}:{{`{{ $labels.instance }}`}}'
@@ -196,7 +196,7 @@ spec:
           for: 1m
           labels:
             environment: {{ $kubernetes_clusters.environment | default "production" }}
-            severity: high
+            severity: critical
             owner:  {{ $kubernetes_clusters.owner | default "devops" }}
             slack_channel: {{ $kubernetes_clusters.slack_channel }}                 
             customer: '{{`{{ $labels.provider }}`}}:{{`{{ $labels.region }}`}}:{{`{{ $labels.cluster_name }}`}}:{{`{{ $labels.instance }}`}}'
@@ -214,7 +214,7 @@ spec:
           for: 1m
           labels:
             environment: {{ $kubernetes_clusters.environment | default "production" }}
-            severity: high
+            severity: warning
             owner:  {{ $kubernetes_clusters.owner | default "devops" }}
             slack_channel: {{ $kubernetes_clusters.slack_channel }}                 
             customer: '{{`{{ $labels.provider }}`}}:{{`{{ $labels.region }}`}}:{{`{{ $labels.cluster_name }}`}}:{{`{{ $labels.instance }}`}}'
@@ -234,7 +234,7 @@ spec:
           for: 5m
           labels:
             environment: {{ $kubernetes_clusters.environment | default "production" }}
-            severity: high
+            severity: warning
             owner:  {{ $kubernetes_clusters.owner | default "devops" }}
             slack_channel: {{ $kubernetes_clusters.slack_channel }}                 
             customer: '{{`{{ $labels.provider }}`}}:{{`{{ $labels.region }}`}}:{{`{{ $labels.cluster_name }}`}}:{{`{{ $labels.instance }}`}}'
@@ -252,7 +252,7 @@ spec:
           for: 5m
           labels:
             environment: {{ $kubernetes_clusters.environment | default "production" }}
-            severity: high
+            severity: warning
             owner:  {{ $kubernetes_clusters.owner | default "devops" }}
             slack_channel: {{ $kubernetes_clusters.slack_channel }}                 
             customer: '{{`{{ $labels.provider }}`}}:{{`{{ $labels.region }}`}}:{{`{{ $labels.cluster_name }}`}}:{{`{{ $labels.instance }}`}}'

@@ -17,7 +17,7 @@ spec:
           for: 1m
           labels:
             environment: {{ $mongo.environment | default "databases" }}
-            severity: high
+            severity: warning
             owner: {{ $mongo.owner | default "devops" }}
             slack_channel:  {{ $mongo.slack_channel }}             
             customer: '{{`{{ $labels.monitoring_agent }}`}}'
@@ -30,7 +30,7 @@ spec:
           for: 1m
           labels:
             environment: {{ $mongo.environment | default "databases" }}
-            severity: high
+            severity: warning
             owner: {{ $mongo.owner | default "devops" }}
             slack_channel:  {{ $mongo.slack_channel }}             
             customer: '{{`{{ $labels.monitoring_agent }}`}}'
@@ -60,7 +60,7 @@ spec:
           for: 1m
           labels:
             environment: {{ $mongo.environment | default "databases" }}
-            severity: high
+            severity: critical
             owner: {{ $mongo.owner | default "devops" }}
             slack_channel:  {{ $mongo.slack_channel }}             
             customer: '{{`{{ $labels.monitoring_agent }}`}}'
@@ -114,7 +114,7 @@ spec:
           for: 20s
           labels:
             environment: {{ $mongo.environment | default "databases" }}
-            severity: high
+            severity: warning
             owner: {{ $mongo.owner | default "devops" }}
             slack_channel:  {{ $mongo.slack_channel }}             
             summary: '{{`{{ $labels.set }}`}}/{{`{{ $labels.service_name }}`}}'
@@ -130,7 +130,7 @@ spec:
           for: 1m
           labels:
             environment: {{ $mongo.environment | default "databases" }}
-            severity: minor
+            severity: warning
             owner: {{ $mongo.owner | default "devops" }}
             slack_channel:  {{ $mongo.slack_channel }}             
             customer: '{{`{{ $labels.instance}}`}}:{{`{{ $labels.family }}`}}'

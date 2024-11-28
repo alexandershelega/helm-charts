@@ -20,7 +20,7 @@ spec:
           for: 1m
           labels:
             environment: {{ $servers.environment | default "production" }}
-            severity: high
+            severity: critical
             owner: {{ $servers.owner | default "devops" }}
             slack_channel: {{ $servers.slack_channel | default "infra" }}              
             customer: '{{`{{ $labels.provider }}`}}:{{`{{ $labels.region }}`}}:{{`{{ $labels.cluster_name }}`}}:{{`{{ $labels.instance }}`}}'
@@ -36,7 +36,7 @@ spec:
           for: 1m
           labels:
             environment: {{ $servers.environment | default "production" }}
-            severity: high
+            severity: warning
             owner: {{ $servers.owner | default "devops" }}
             slack_channel: {{ $servers.slack_channel | default "infra" }}              
             customer: '{{`{{ $labels.provider }}`}}:{{`{{ $labels.region }}`}}:{{`{{ $labels.cluster_name }}`}}:{{`{{ $labels.instance }}`}}'
@@ -54,7 +54,7 @@ spec:
           for: 5m
           labels:
             environment: {{ $servers.environment | default "production" }}
-            severity: high
+            severity: warning
             owner: {{ $servers.owner | default "devops" }}
             slack_channel: {{ $servers.slack_channel | default "infra" }}              
             customer: '{{`{{ $labels.provider }}`}}:{{`{{ $labels.region }}`}}:{{`{{ $labels.cluster_name }}`}}:{{`{{ $labels.instance }}`}}'
@@ -70,7 +70,7 @@ spec:
           for: 1m
           labels:
             environment: {{ $servers.environment | default "production" }}
-            severity: high
+            severity: warning
             owner: {{ $servers.owner | default "devops" }}
             slack_channel: {{ $servers.slack_channel | default "infra" }}              
             customer: '{{`{{ $labels.provider }}`}}:{{`{{ $labels.region }}`}}:{{`{{ $labels.cluster_name }}`}}:{{`{{ $labels.instance }}`}}'
@@ -86,7 +86,7 @@ spec:
           for: 1m
           labels:
             environment: {{ $servers.environment | default "production" }}
-            severity: high
+            severity: warning
             owner: {{ $servers.owner | default "devops" }}
             slack_channel: {{ $servers.slack_channel | default "infra" }}              
             customer: '{{`{{ $labels.family }}`}} {{`{{ $labels.dimension }}`}}'
@@ -103,7 +103,7 @@ spec:
           for: 1m
           labels:
             environment: {{ $servers.environment | default "production" }}
-            severity: high
+            severity: warning
             owner: {{ $servers.owner | default "devops" }}
             slack_channel: {{ $servers.slack_channel | default "infra" }}              
             customer: '{{`{{ $labels.family }}`}} {{`{{ $labels.dimension }}`}}'
@@ -117,7 +117,7 @@ spec:
           for: 1m
           labels:
             environment: {{ $servers.environment | default "production" }}
-            severity: high
+            severity: warning
             owner: {{ $servers.owner | default "devops" }}
             slack_channel: {{ $servers.slack_channel | default "infra" }}              
             customer: '{{`{{ $labels.family }}`}} {{`{{ $labels.dimension }}`}}'
@@ -133,7 +133,7 @@ spec:
           for: 1m
           labels:
             environment: {{ $servers.environment | default "production" }}
-            severity: high
+            severity: warning
             owner: {{ $servers.owner | default "devops" }}
             slack_channel: {{ $servers.slack_channel | default "infra" }}              
             customer: '{{`{{ $labels.family }}`}} {{`{{ $labels.dimension }}`}}'
@@ -147,7 +147,7 @@ spec:
           for: 1m
           labels:
             environment: {{ $servers.environment | default "production" }}
-            severity: high
+            severity: warning
             owner: {{ $servers.owner | default "devops" }}
             slack_channel: {{ $servers.slack_channel | default "infra" }}              
             customer: '{{`{{ $labels.family }}`}} {{`{{ $labels.dimension }}`}}'
@@ -163,7 +163,7 @@ spec:
           for: 5m
           labels:
             environment: {{ $servers.environment | default "production" }}
-            severity: high
+            severity: critical
             owner: {{ $servers.owner | default "devops" }}
             slack_channel: {{ $servers.slack_channel | default "infra" }}
             customer: '{{`{{ $labels.instance}}`}}:{{`{{ $labels.family }}`}}'
