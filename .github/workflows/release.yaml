@@ -33,7 +33,7 @@ jobs:
             git checkout gh-pages -- ./*.tgz 
             git checkout main        # Switch back to the main branch
             mkdir old-packages
-            mv *.tgz old-packages/
+            mv packages/*.tgz old-packages/
           else
             echo "gh-pages branch does not exist; nothing to fetch"
           fi
