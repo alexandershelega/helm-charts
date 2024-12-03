@@ -5,6 +5,9 @@ metadata:
   name: {{ include "general.name" . }}
   labels:
     {{- include "general.labels" . | nindent 4 }}
+    {{- if .Values.labels  }}
+    {{- toYaml .Values.labels | nindent 4 }}
+    {{ end }}
 spec:
   minAvailable: {{ .Values.podDisruptionBudget.minAvailable }}
   selector:
