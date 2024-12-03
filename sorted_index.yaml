@@ -5,7 +5,25 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2024-11-28T13:13:12.184183364Z",
+        "created": "2024-12-03T07:29:52.789227006Z",
+        "description": "Universal Chart for deploying kubernetes applications",
+        "digest": "80fb9edd6b7f26e8961ff44f1655e71097b6645aff3b8fc963c677df14b817a6",
+        "maintainers": [
+          {
+            "email": "alexander.shelega@gmail.com",
+            "name": "Alexander Shelega"
+          }
+        ],
+        "name": "general",
+        "urls": [
+          "https://alexandershelega.github.io/helm-charts/packages/general-0.1.8.tgz"
+        ],
+        "version": "0.1.8"
+      },
+      {
+        "apiVersion": "v2",
+        "appVersion": "1.0.0",
+        "created": "2024-12-03T07:29:52.788652713Z",
         "description": "Universal Chart for deploying kubernetes applications",
         "digest": "a435921ee4b8e9394ddeed2a54320607c37aa3478eaa6a7fd95b6e5e6669420b",
         "maintainers": [
@@ -28,7 +46,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2024-11-28T13:13:12.184497892Z",
+        "created": "2024-12-03T07:29:52.789548806Z",
         "description": "Prometheus Alert Generator",
         "digest": "ded7737d35aedd091bce1625aaf1fe617b3c4a2c19012db5abde0a9d3680fd74",
         "maintainers": [
@@ -51,7 +69,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2024-11-28T13:13:12.185705318Z",
+        "created": "2024-12-03T07:29:52.790685418Z",
         "description": "VM Alert/Scrape Generator",
         "digest": "71dbc4dbe5184ae452c57a4c5a77a87c8de4a79321d3c81b3b051f5dadbb93e2",
         "maintainers": [
@@ -69,7 +87,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2024-11-28T13:13:12.185421698Z",
+        "created": "2024-12-03T07:29:52.790408902Z",
         "description": "VM Alert/Scrape Generator",
         "digest": "f3930d1c32e783f4c6601ce6d6b827b30c8b7f5116690eb189ce2cc16f7c6273",
         "maintainers": [
@@ -87,7 +105,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2024-11-28T13:13:12.185136535Z",
+        "created": "2024-12-03T07:29:52.790111577Z",
         "description": "VM Alert/Scrape Generator",
         "digest": "c9352d9cce4af79904884f5a8cbdb82478520d16c7e12b8a1233423510d56f58",
         "maintainers": [
@@ -105,7 +123,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2024-11-28T13:13:12.184820104Z",
+        "created": "2024-12-03T07:29:52.789828228Z",
         "description": "VM Alert/Scrape Generator",
         "digest": "e6d77ceaed6b41a2ed86516473c2c4212e90749ed8416f6b391b511ad4bb9cc4",
         "maintainers": [
