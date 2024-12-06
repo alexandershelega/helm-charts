@@ -61,7 +61,7 @@ spec:
           annotations:
             value: '{{`{{ $value | printf "%.2f" }}`}}'
             summary: "{{`{{ $labels.provider }}`}}/{{`{{ $labels.region }}`}}: {{`{{ $labels.cluster_name }}`}}, Node: {{`{{ $labels.instance }}`}}"
-            description: 'Load average of kubernetes node: {{`{{ $labels.instance }}`}} is {{`{{ $value | printf "%.2f" }}`}}'
+            description: 'Load average of server: {{`{{ $labels.instance }}`}} is {{`{{ $value | printf "%.2f" }}`}}'
             troubleshooting: "Inform DevOps Team"
     - name: 'Node Drive Usage'  # percent
       rules:
@@ -77,7 +77,7 @@ spec:
           annotations:
             value: '{{`{{ $value | printf "%.2f" }}`}}%'
             summary: "{{`{{ $labels.provider }}`}}/{{`{{ $labels.region }}`}}: {{`{{ $labels.cluster_name }}`}}, Node: {{`{{ $labels.instance }}`}}"
-            description: 'Kubernetes node: {{`{{ $labels.instance }}`}} drive: {{`{{ $labels.family }}`}} usage is {{`{{ $value | printf "%.2f" }}`}}%'
+            description: 'Server: {{`{{ $labels.instance }}`}} drive: {{`{{ $labels.family }}`}} usage is {{`{{ $value | printf "%.2f" }}`}}%'
             troubleshooting: 'Inform Devops Team'
     - name: 'Established Connections'
       rules:

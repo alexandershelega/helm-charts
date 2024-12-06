@@ -210,8 +210,8 @@ spec:
     - name: 'Node CPU Usage' # percent
       rules:
         - alert: 'Kubernetes Node CPU Usage'
-          expr: sum(avg_over_time(netdata_system_cpu_percentage_average{provider=~"{{ $kubernetes_clusters.provider }}",cluster_name=~"{{ $kubernetes_clusters.cluster_name }}",dimension!="idle",env!="non-kubernetes"}[90s])) by (provider,region,cluster_name,instance) > 80
-          for: 1m
+          expr: sum(avg_over_time(netdata_system_cpu_percentage_average{provider=~"{{ $kubernetes_clusters.provider }}",cluster_name=~"{{ $kubernetes_clusters.cluster_name }}",dimension!="idle",env!="non-kubernetes"}[90s])) by (provider,region,cluster_name,instance) > 90
+          for: 5m
           labels:
             environment: {{ $kubernetes_clusters.environment | default "production" }}
             severity: warning

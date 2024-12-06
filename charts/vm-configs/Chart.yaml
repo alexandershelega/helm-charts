@@ -1,7 +1,7 @@
 apiVersion: v2
 name: vm-configs
 description: VM Alert/Scrape Generator
-version: 0.0.6
+version: 0.0.7
 appVersion: "1.0.0"
 maintainers:
 - name: Alexander Shelega
