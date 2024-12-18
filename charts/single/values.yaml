@@ -7,9 +7,8 @@
 ##### different name but it will have same app label which have main deployment 
 
 name: nginx
-imagePullSecrets:
 hostNetwork:
-
+imagePullSecrets: {}
 
 ###### Service Account 
 serviceAccount:
@@ -215,9 +214,6 @@ autoscaling:
 
 keda:
   apiVersion: "keda.sh/v1alpha1"
-  ## apiVersion changes with keda 1.x vs 2.x
-  ## 2.x = keda.sh/v1alpha1
-  ## 1.x = keda.k8s.io/v1alpha1
   enabled: false
   minReplicas: 1
   maxReplicas: 11

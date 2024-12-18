@@ -7,7 +7,7 @@ metadata:
   annotations:
   {{- toYaml .Values.annotations | nindent 4 }}
   labels:
-    app: {{ regexReplaceAll "-exp-[a-zA-Z0-9]{1,10}$" (include "general.name" .) "" | replace "-spot" "" }}
+    app: {{ regexReplaceAll "-exp-[a-zA-Z0-9]{1,10}$" (include "general.name" .) "" }}
   {{- include "general.labels" . | nindent 4 }}  
   {{- if .Values.labels  }}
   {{- toYaml .Values.labels | nindent 4 }}
@@ -29,16 +29,18 @@ spec:
             {{- toYaml .Values.annotations | nindent 12 }}
             {{- end }}
           labels:
-            app: {{ regexReplaceAll "-exp-[a-zA-Z0-9]{1,10}$" (include "general.name" .) "" | replace "-spot" "" }}
+            app: {{ regexReplaceAll "-exp-[a-zA-Z0-9]{1,10}$" (include "general.name" .) "" }}
             {{- include "general.labels" . | nindent 12 }} 
             {{- if .Values.labels  }}
             {{- toYaml .Values.labels | nindent 12 }}
             {{- end }}
         spec:
-          {{- if .Values.imagePullSecrets }}
-          ##### pull secret block
+          ##### pull secret block      
+          {{- if .Values.imagePullSecrets  }}
           imagePullSecrets:
-            - name: {{ .Values.imagePullSecrets }}
+            {{- range .Values.imagePullSecrets }}
+            - name: {{ . }}
+            {{- end }}      
           {{- end }} 
           ##### affinity block
           {{- if .Values.affinity  }}

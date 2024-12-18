@@ -22,7 +22,7 @@ spec:
     name: {{ $.Values.service_internal.portname  | default "tcp" }}-{{ . }}
   {{- end }}     
   selector:
-    app: {{ regexReplaceAll "-exp-[a-zA-Z0-9]{1,10}$" (include "single.name" .) "" | replace "-spot" "" }}
+    app: {{ regexReplaceAll "-exp-[a-zA-Z0-9]{1,10}$" (include "single.name" .) "" }}
     {{- if .Values.service_internal.extraSelector  }}
     {{- toYaml .Values.service_internal.extraSelector | nindent 4 }}
     {{- end }}
