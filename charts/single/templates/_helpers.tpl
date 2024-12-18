@@ -25,12 +25,6 @@ helm.sh/chart: {{ include "single.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end }}
-
-{{/*
-Selector labels
-*/}}
-{{- define "single.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "single.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
