@@ -1,0 +1,44 @@
+{{- if eq .Values.service_public.type "LoadBalancer" }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "general.name" . }}-publb
+  annotations:
+    {{- toYaml .Values.service_public.annotations | nindent 4 }}  
+  labels:
+    app: {{ include "general.name" . }}
+    {{- include "general.labels" . | nindent 4 }}
+    {{- if .Values.service_public.label }}
+    {{- toYaml .Values.service_public.labels | nindent 4 }}    
+    {{- end }}
+spec:
+  type: {{ .Values.service_public.type }}
+  externalTrafficPolicy: {{ .Values.service_public.externalTrafficPolicy }}
+#### access controll  
+{{- if .Values.service_public.loadBalancerSourceRanges.enabled }}
+  loadBalancerSourceRanges:
+  {{- range .Values.service_public.loadBalancerSourceRanges.adresses }}
+  - {{ . | default "0.0.0.0/0" }}
+  {{- end }}
+{{- end }}
+#### mapping IP address to LB
+  {{- range .Values.service_public.loadBalancerExternalAdresses.adresses }}
+  loadBalancerIP: {{ . }}
+  {{- end }}
+  {{- range .Values.service_public.loadBalancerExternalAdresses.adresses }}
+  externalIPs:
+  - {{ . }}
+  {{- end }}
+
+  ports:
+  {{- range .Values.service_public.port }}
+  - port: {{ . }}
+    targetPort: {{ . }}
+    protocol: TCP
+    name: app-{{ . }}
+  {{- end }}
+
+  selector:
+    app: {{ regexReplaceAll "-v[0-9]{1,2}$" (include "general.name" .) "" }}
+{{- end }}

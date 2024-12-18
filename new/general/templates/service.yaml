@@ -1,0 +1,32 @@
+{{- if or (eq .Values.service_internal.type "ClusterIP")  (eq .Values.service_internal.type "NodePort") }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "general.name" . }}
+  annotations:
+    {{- toYaml .Values.service_internal.annotations | nindent 4 }}
+  labels:
+    app: {{ include "general.name" . }}
+    {{- include "general.labels" . | nindent 4 }}
+    {{- if .Values.labels  }}
+    {{- toYaml .Values.labels | nindent 4 }}
+    {{ end }}
+spec:
+  type: {{ .Values.service_internal.type }}
+  ports:
+  {{- range .Values.service_internal.port }}
+  - port: {{ . }}
+    targetPort: {{ . }}
+    protocol: TCP
+    name: {{ $.Values.service_internal.portname  | default "tcp" }}-{{ . }}
+  {{- end }}     
+  selector:
+    app: {{ regexReplaceAll "-exp-[a-zA-Z0-9]{1,10}$" (include "general.name" .) "" }}
+    {{- if .Values.service_internal.extraSelector  }}
+    {{- toYaml .Values.service_internal.extraSelector | nindent 4 }}
+    {{- end }}
+{{- end }}
+
+
+
