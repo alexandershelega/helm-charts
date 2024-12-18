@@ -1,0 +1,147 @@
+{{- if eq .Values.deployment.enabled true }}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "general.name" . }}
+  annotations:
+    {{- toYaml .Values.annotations | nindent 4 }}
+  labels:
+    app: {{ regexReplaceAll "-exp-[a-zA-Z0-9]{1,10}$" (include "general.name" .) "" | replace "-spot" "" }}
+    {{- include "general.labels" . | nindent 4 }}
+    {{- if .Values.labels  }}
+    {{- toYaml .Values.labels | nindent 4 }}
+    {{- end }}    
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.deployment.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ regexReplaceAll "-exp-[a-zA-Z0-9]{1,10}$" (include "general.name" .) "" | replace "-spot" "" }} 
+      {{- if .Values.selector_labels  }}
+      {{- toYaml .Values.selector_labels | nindent 6 }}
+      {{- end }}
+  {{- if .Values.deployment.strategy  }}     
+  strategy:
+    type: {{ .Values.deployment.strategy.type | default "RollingUpdate" }}
+    {{- if eq .Values.deployment.strategy.type "RollingUpdate" }}
+    rollingUpdate:
+      maxSurge: {{   .Values.deployment.strategy.maxSurge | default "25%"  }}
+      maxUnavailable: {{  .Values.deployment.strategy.maxUnavailable | default "25%" }} 
+    {{- end }}   
+  {{- end }}    
+  minReadySeconds: {{ .Values.minReadySeconds | default "5" }}           
+  template:
+    metadata:
+      annotations:
+        {{- toYaml .Values.annotations | nindent 8 }}
+      labels:
+        app: {{ regexReplaceAll "-exp-[a-zA-Z0-9]{1,10}$" (include "general.name" .) "" | replace "-spot" "" }}
+        {{- if .Values.labels  }}
+        {{- toYaml .Values.labels | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.imagePullSecrets  }}
+      hostNetwork: {{ .Values.hostNetwork }}
+      {{- end }}
+      {{- if .Values.imagePullSecrets  }}
+      ##### pull secret block
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets }}
+      {{- end }} 
+      ##### affinity block
+      {{- if .Values.affinity  }}
+      affinity:
+      {{- toYaml .Values.affinity | nindent 10 }}
+      {{- end }}
+      ##### tolerations block
+      {{- if .Values.tolerations  }}
+      tolerations:
+      {{- toYaml .Values.tolerations | nindent 10 }}
+      {{- end }}      
+      ##### service acount block
+      serviceAccountName: {{ include "general.name" . }}
+      ##### security context block
+      securityContext:
+      {{- toYaml .Values.podSecurityContext | nindent 10 }} 
+      ##### priority class block
+      {{- if  .Values.priorityClassName }}
+      priorityClassName:  {{ .Values.priorityClassName }}
+      {{- end }}   
+      ##### host aliases block
+      {{- if .Values.hostAliases  }}
+      hostAliases:
+      {{- range $key, $value := .Values.hostAliases }}
+      - ip: {{ $key }}
+        hostnames:
+        -  {{ $value | quote }}
+      {{- end }}  
+      {{- end }} 
+      {{- if .Values.initContainers  }}          
+      containers:     
+        - name: {{ index .Values.name }}
+          image: {{ index .Values.repository }}:{{ index .Values.tag }}
+          imagePullPolicy: {{ index .Values.pullPolicy | default "IfNotPresent" }}
+          ###### lifecycle
+          {{- if index .Values.lifecycle  }}
+          lifecycle:
+          {{- toYaml ( index .Values.lifecycle ) | nindent 12 -}}
+          {{- end }}    
+          ##### container run command
+          {{- if index .Values.cmd  }}
+          command:
+          {{- toYaml ( index .Values.cmd  )| nindent 12 }}
+          {{- end }}
+          {{- if index .Values.arg  }}
+          args:
+          {{- toYaml ( index .Values.arg )| nindent 12 }}
+          {{- end }}     
+          ##### container ports 
+          ports:
+          {{- range (index .Values.containerPort ) }}
+          - containerPort: {{ . }}
+          {{- end }}            
+          ##### resources                    
+          {{- if index .Values.resources  }}
+          resources:
+          {{- toYaml (index .Values.resources ) | nindent 12 }}          
+          {{- end }}  
+          ##### readinessProbe probe
+          {{- if index .Values.readinessProbe  }}
+          readinessProbe:
+          {{- toYaml (index .Values.readinessProbe ) | nindent 12 }}
+          {{- end }}
+          ##### livenessProbe probe
+          {{- if index .Values.livenessProbe  }}
+          livenessProbe:
+          {{- toYaml ( index .Values.livenessProbe ) | nindent 12 }}
+          {{- end }}              
+          ###### securityContext
+          {{- if index .Values.securityContext  }}          
+          securityContext:
+          {{- toYaml ( index .Values.securityContext )| nindent 12 }}   
+          {{- end }} 
+          ###### volumeMounts     
+          {{- if index .Values.volumeMounts  }}                                                  
+          volumeMounts:
+            {{-  toYaml ( index .Values.volumeMounts ) | nindent 12 }} 
+          {{- end }}   
+          ###### env block   
+          {{- if index .Values.env  }}                    
+          env:
+            - name: TERM
+              value: "xterm"
+          {{- range $key, $value := index .Values.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+          {{- end }} 
+          {{- end }}    
+
+      ##### volumes
+      {{- if .Values.volumes  }}
+      volumes:
+        {{- toYaml .Values.volumes | nindent 12 }} 
+      {{- end }}   
+{{- end }}       

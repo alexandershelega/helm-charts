@@ -1,0 +1,318 @@
+###### Global environments
+
+##### experimental spot part
+##### in case when we need to have second deployment under same service
+##### like deployment on spot instances we can just dublicate deployment 
+##### and set name `deployment-name-spot`, it will create deployment with
+##### different name but it will have same app label which have main deployment 
+
+name: nginx
+imagePullSecrets:
+hostNetwork:
+
+
+###### Service Account 
+serviceAccount:
+  annotations: {}
+
+
+##### affinity description
+annotations:
+  #vault.hashicorp.com/agent-inject: "true"
+  #vault.hashicorp.com/agent-pre-populate-only : "true"
+  #vault.hashicorp.com/agent-inject-secret-envs: "prod/secret-name"
+  #vault.hashicorp.com/role: "secret-name-app-prod"
+  #vault.hashicorp.com/agent-inject-template-envs: |
+  #  {{- with secret "prod/secret-name" -}}
+  #  {{- range $k, $v := .Data.data -}}
+  #  {{ $k }}="{{ $v }}"
+  #  {{ end }}
+  #  {{- end }}
+  #environment: prod
+
+
+##### labels description
+labels: 
+
+##### this field shouldn't change after deployment, removing or changing values here can broke deployment process
+selector_labels:
+
+priorityClassName: 
+
+affinity: {}
+# nodeAffinity:
+#   requiredDuringSchedulingIgnoredDuringExecution:
+#     nodeSelectorTerms:
+#     - matchExpressions:
+#       - key: "nginx"
+#         operator: In
+#         values:
+#         - "true"
+#  podAntiAffinity:
+#    requiredDuringSchedulingIgnoredDuringExecution:
+#    - labelSelector:
+#        matchExpressions:
+#        - key: app
+#          operator: In
+#          values:
+#          - test-app-live
+#      topologyKey: "kubernetes.io/hostname"
+##### tolerations description
+tolerations: {}
+#- key: "app"
+#  operator: "Equal"
+#  value: "main"
+#  effect: "NoSchedule"
+podSecurityContext: {}
+
+
+minReadySeconds: 5
+
+
+###### Cluster IP service description
+service_internal:
+  ##### set type: none for disable current svc or ClusterIP/NodePort for enable
+  type: ClusterIP
+  portname: tcp
+  port: ["80"]
+  annotations: {}
+  extraSelector: {}
+
+###### LoadBalancer service description
+service_public:
+  ##### set type: none for disable current svc or LoadBalancer for enable
+  type: none
+  port: ["80"]
+  annotations: {}
+    # cloud.google.com/load-balancer-type: "Internal"
+  loadBalancerSourceRanges:
+    enabled: true
+    adresses: [ "0.0.0.0/0"]
+  externalTrafficPolicy: Cluster
+  ##### Leave empty to auto alocate#
+  loadBalancerExternalAdresses:
+    adresses:
+
+
+initContainers: {}
+#- name: busybox
+#  repository: busybox
+#  tag: latest
+#  pullPolicy: Always
+#  ##### application port to expose, value can be empty
+#  containerPort: [] 
+#  ##### lifecycle job
+#  lifecycle: {}
+#  cmd: 
+#    - /bin/sh
+#    - -c
+#    - sleep 10
+#  arg: {} 
+#  ##### readinessProbe description
+#  readinessProbe: {}
+#  ##### livenessProbe description
+#  livenessProbe: {}
+#  resources:  {}
+#  volumeMounts: {}
+#  securityContext: {} 
+#  env: {}
+
+#### container description
+#### to add extra container in pod just dublicate all values below
+containers:
+- name: nginx
+  repository: nginx
+  tag: latest
+  pullPolicy: Always
+  ##### application port to expose, value can be empty
+  containerPort: ["80"] 
+  ##### lifecycle job
+  lifecycle: {}
+  #  postStart:
+  #    exec:
+  #      command:
+  #        - /bin/sh
+  #        - -c
+  #        - hostname
+  #  preStop:
+  #    exec:
+  #      command: ["/usr/sbin/nginx","-s","quit"]  
+  ##### run command with arg leave empty to use container entrypoint 
+  cmd: {}
+  #  - /bin/sh
+  #  - -c
+  #  - date      
+  arg: {} 
+  ##### readinessProbe description
+  readinessProbe: {}
+  # tcpSocket:
+  #   port: 80
+  # initialDelaySeconds: 5
+  # periodSeconds: 10
+  ##### livenessProbe description
+  livenessProbe: {}
+  #  httpGet:
+  #    path: /
+  #    port: 80
+  #  initialDelaySeconds: 5
+  #  periodSeconds: 10
+  ##### resource  description
+  resources: {}
+  #  limits:
+  #    cpu: 100m
+  #    memory: 256Mi
+  #  requests:
+  #    cpu: 100m
+  #    memory: 128Mi   
+  volumeMounts: {}
+  #  - mountPath: /live/shm
+  #    name: dshm
+  securityContext: {}
+  #  capabilities:
+  #    drop:
+  #    - ALL
+  #  readOnlyRootFilesystem: true
+  #  runAsNonRoot: true
+  #  runAsUser: 1000    
+  env: {}  
+#- name: redis
+#  repository: redis
+#  tag: latest
+#  pullPolicy: Always
+#  ##### application port to expose, value can be empty
+#  containerPort: [] 
+#  ##### lifecycle job
+#  lifecycle: {}
+#  cmd: {}
+#  arg: {} 
+#  ##### readinessProbe description
+#  readinessProbe: {}
+#  ##### livenessProbe description
+#  livenessProbe: {}
+#  resources:  {}
+#  volumeMounts: {}
+#  securityContext: {}
+#  env: {}
+
+
+ 
+###### Deployment description
+
+deployment: 
+   enabled: true
+   replicaCount: 1  
+   strategy: 
+     type: RollingUpdate
+     maxSurge: 30%
+     maxUnavailable: 30%
+
+daemonset: 
+  enabled: false
+  updateStrategy:
+    type: RollingUpdate
+    maxSurge: 30%
+
+
+cronjob: 
+   enabled: false
+   schedule: "* * * * *"
+   restartPolicy: OnFailure
+   concurrencyPolicy: Forbid
+   successfulJobsHistoryLimit: 3
+   failedJobsHistoryLimit: 1
+   activeDeadlineSeconds: 
+
+volumes:
+#  - name: dshm
+#    emptyDir:
+#      medium: Memory
+
+hostAliases:
+#  192.168.1.1: test.com
+
+
+podDisruptionBudget:
+  enabled: false
+  minAvailable: 1
+  
+
+autoscaling:
+  enabled: false
+  minReplicas: 3
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 
+  metrics: {}
+  #  - type: Pods
+  #    pods:
+  #      metric:
+  #        name: packets-per-second
+  #      target:
+  #        type: AverageValue
+  #        averageValue: 1k
+  behavior: {}  
+
+
+keda:
+  apiVersion: "keda.sh/v1alpha1"
+  ## apiVersion changes with keda 1.x vs 2.x
+  ## 2.x = keda.sh/v1alpha1
+  ## 1.x = keda.k8s.io/v1alpha1
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 11
+  pollingInterval: 30
+  cooldownPeriod: 300
+  # fallback:
+  #   failureThreshold: 3
+  #   replicas: 11
+  restoreToOriginalReplicaCount: false
+  scaledObject:
+    annotations: {}
+  triggers: []
+  # - type: prometheus
+  #   metadata:
+  #     serverAddress: http://<prometheus-host>:9090
+  #     metricName: http_requests_total
+  #     threshold: '100'
+  #     query: sum(rate(http_requests_total{deployment="my-deployment"}[2m]))
+  behavior: {}
+  # scaleDown:
+  #   stabilizationWindowSeconds: 300
+  #   policies:
+  #   - type: Pods
+  #     value: 1
+  #     periodSeconds: 180
+  # scaleUp:
+  #   stabilizationWindowSeconds: 300
+  #   policies:
+  #   - type: Pods
+  #     value: 2
+  #     periodSeconds: 60
+
+
+
+extraManifests: []
+#  - apiVersion: monitoring.coreos.com/v1
+#    kind: PrometheusRule
+#    metadata:
+#      labels:
+#        prometheus: "true"
+#      name: test-rule
+#    spec:
+#      groups:
+#        - name: 'Test Alert'
+#          rules:
+#            - alert: 'Test Alert'
+#              expr: sum by (cluster_name, provider, region) (kubernetes_build_info) > 0
+#              for: 1m
+#              labels:
+#                source: '{{`{{ $labels.provider }}`}}/{{`{{ $labels.cluster_name }}`}}'
+#                instance: '{{`{{ $labels.container }}`}}'
+#                severity: warning
+#                owner: devops
+#              annotations:
+#                value: '{{`{{ $value }}`}}'
+#                summary: 'Cluster: {{`{{ $labels.provider}}`}}/{{`{{ $labels.cluster_name}}`}}, Component: Sidecar, Pod: {{`{{ $labels.pod }}`}}'
+#                description: 'Thanos block last successfull upload time was {{`{{ $value }}`}} hours ago'
+#                troubleshooting: "Inform DevOps team"
