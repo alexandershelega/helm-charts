@@ -5,7 +5,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2024-12-18T07:24:47.516645632Z",
+        "created": "2024-12-18T08:15:42.19711372Z",
         "description": "Universal Chart for deploying kubernetes applications",
         "digest": "fc3084a7103a86ea543d34f6926d85cebc0d7fbc776ad8158a158af83b6f8d20",
         "maintainers": [
@@ -23,7 +23,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2024-12-18T07:24:47.515664902Z",
+        "created": "2024-12-18T08:15:42.196504027Z",
         "description": "Universal Chart for deploying kubernetes applications",
         "digest": "a435921ee4b8e9394ddeed2a54320607c37aa3478eaa6a7fd95b6e5e6669420b",
         "maintainers": [
@@ -46,7 +46,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2024-12-18T07:24:47.516957945Z",
+        "created": "2024-12-18T08:15:42.197427458Z",
         "description": "Prometheus Alert Generator",
         "digest": "ded7737d35aedd091bce1625aaf1fe617b3c4a2c19012db5abde0a9d3680fd74",
         "maintainers": [
@@ -69,7 +69,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2024-12-18T07:24:47.517548167Z",
+        "created": "2024-12-18T08:15:42.198802903Z",
         "description": "Universal Chart for deploying kubernetes applications",
         "digest": "7c4887d2ab6bb86fad39d61a1cd3bcac661c02ef31276aa0bec7e2fcfb401999",
         "maintainers": [
@@ -92,7 +92,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2024-12-18T07:24:47.518970063Z",
+        "created": "2024-12-18T08:15:42.200485657Z",
         "description": "VM Alert/Scrape Generator",
         "digest": "a4cd899c68c241ed5d04f4c6a4ac0e5a4a03f71133ecc9af1082406a5f3fabd6",
         "maintainers": [
@@ -110,7 +110,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2024-12-18T07:24:47.51867971Z",
+        "created": "2024-12-18T08:15:42.200096377Z",
         "description": "VM Alert/Scrape Generator",
         "digest": "71dbc4dbe5184ae452c57a4c5a77a87c8de4a79321d3c81b3b051f5dadbb93e2",
         "maintainers": [
@@ -128,7 +128,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2024-12-18T07:24:47.518407973Z",
+        "created": "2024-12-18T08:15:42.199804982Z",
         "description": "VM Alert/Scrape Generator",
         "digest": "f3930d1c32e783f4c6601ce6d6b827b30c8b7f5116690eb189ce2cc16f7c6273",
         "maintainers": [
@@ -146,7 +146,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2024-12-18T07:24:47.518121989Z",
+        "created": "2024-12-18T08:15:42.199501422Z",
         "description": "VM Alert/Scrape Generator",
         "digest": "c9352d9cce4af79904884f5a8cbdb82478520d16c7e12b8a1233423510d56f58",
         "maintainers": [
@@ -164,7 +164,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2024-12-18T07:24:47.517837958Z",
+        "created": "2024-12-18T08:15:42.199199146Z",
         "description": "VM Alert/Scrape Generator",
         "digest": "e6d77ceaed6b41a2ed86516473c2c4212e90749ed8416f6b391b511ad4bb9cc4",
         "maintainers": [
