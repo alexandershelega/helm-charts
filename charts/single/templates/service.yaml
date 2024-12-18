@@ -3,12 +3,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "general.name" . }}
+  name: {{ include "single.name" . }}
   annotations:
     {{- toYaml .Values.service_internal.annotations | nindent 4 }}
   labels:
-    app: {{ include "general.name" . }}
-    {{- include "general.labels" . | nindent 4 }}
+    app: {{ include "single.name" . }}
+    {{- include "single.labels" . | nindent 4 }}
     {{- if .Values.labels  }}
     {{- toYaml .Values.labels | nindent 4 }}
     {{ end }}
@@ -22,7 +22,7 @@ spec:
     name: {{ $.Values.service_internal.portname  | default "tcp" }}-{{ . }}
   {{- end }}     
   selector:
-    app: {{ regexReplaceAll "-exp-[a-zA-Z0-9]{1,10}$" (include "general.name" .) "" | replace "-spot" "" }}
+    app: {{ regexReplaceAll "-exp-[a-zA-Z0-9]{1,10}$" (include "single.name" .) "" | replace "-spot" "" }}
     {{- if .Values.service_internal.extraSelector  }}
     {{- toYaml .Values.service_internal.extraSelector | nindent 4 }}
     {{- end }}

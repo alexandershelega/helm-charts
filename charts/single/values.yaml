@@ -94,33 +94,10 @@ service_public:
     adresses:
 
 
-initContainers: {}
-#- name: busybox
-#  repository: busybox
-#  tag: latest
-#  pullPolicy: Always
-#  ##### application port to expose, value can be empty
-#  containerPort: [] 
-#  ##### lifecycle job
-#  lifecycle: {}
-#  cmd: 
-#    - /bin/sh
-#    - -c
-#    - sleep 10
-#  arg: {} 
-#  ##### readinessProbe description
-#  readinessProbe: {}
-#  ##### livenessProbe description
-#  livenessProbe: {}
-#  resources:  {}
-#  volumeMounts: {}
-#  securityContext: {} 
-#  env: {}
-
 #### container description
 #### to add extra container in pod just dublicate all values below
 containers:
-- name: nginx
+  name: nginx
   repository: nginx
   tag: latest
   pullPolicy: Always
@@ -175,31 +152,14 @@ containers:
   #  runAsNonRoot: true
   #  runAsUser: 1000    
   env: {}  
-#- name: redis
-#  repository: redis
-#  tag: latest
-#  pullPolicy: Always
-#  ##### application port to expose, value can be empty
-#  containerPort: [] 
-#  ##### lifecycle job
-#  lifecycle: {}
-#  cmd: {}
-#  arg: {} 
-#  ##### readinessProbe description
-#  readinessProbe: {}
-#  ##### livenessProbe description
-#  livenessProbe: {}
-#  resources:  {}
-#  volumeMounts: {}
-#  securityContext: {}
-#  env: {}
+
 
 
  
 ###### Deployment description
 
 deployment: 
-   enabled: true
+   enabled: false
    replicaCount: 1  
    strategy: 
      type: RollingUpdate

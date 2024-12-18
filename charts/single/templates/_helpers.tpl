@@ -2,7 +2,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "general.name" -}}
+{{- define "single.name" -}}
 {{- default .Values.name | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Expand the name of the chart.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "general.chart" -}}
+{{- define "single.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -18,9 +18,9 @@ Create chart name and version as used by the chart label.
 {{/*
 Common labels
 */}}
-{{- define "general.labels" -}}
-helm.sh/chart: {{ include "general.chart" . }}
-{{ include "general.selectorLabels" . }}
+{{- define "single.labels" -}}
+helm.sh/chart: {{ include "single.chart" . }}
+{{ include "single.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -30,140 +30,9 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "general.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "general.name" . }}
+{{- define "single.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "single.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
    
-
-{{/*
-Deployment Containers
-*/}}
-{{- define "general.deploymentContainers" -}}   
-      {{- range $key, $val :=  .containerList }} 
-        - name: {{ index $val.name }}
-          image: {{ index $val.repository }}:{{ index $val.tag }}
-          imagePullPolicy: {{ index $val.pullPolicy | default "IfNotPresent" }}
-          ###### lifecycle
-          {{- if index $val.lifecycle  }}
-          lifecycle:
-          {{- toYaml ( index $val.lifecycle ) | nindent 12 -}}
-          {{- end }}    
-          ##### container run command
-          {{- if index $val.cmd  }}
-          command:
-          {{- toYaml ( index $val.cmd  )| nindent 12 }}
-          {{- end }}
-          {{- if index $val.arg  }}
-          args:
-          {{- toYaml ( index $val.arg )| nindent 12 }}
-          {{- end }}     
-          ##### container ports 
-          ports:
-          {{- range (index $val.containerPort ) }}
-          - containerPort: {{ . }}
-          {{- end }}            
-          ##### resources                    
-          {{- if index $val.resources  }}
-          resources:
-          {{- toYaml (index $val.resources ) | nindent 12 }}          
-          {{- end }}  
-          ##### readinessProbe probe
-          {{- if index $val.readinessProbe  }}
-          readinessProbe:
-          {{- toYaml (index $val.readinessProbe ) | nindent 12 }}
-          {{- end }}
-          ##### livenessProbe probe
-          {{- if index $val.livenessProbe  }}
-          livenessProbe:
-          {{- toYaml ( index $val.livenessProbe ) | nindent 12 }}
-          {{- end }}              
-          ###### securityContext
-          {{- if index $val.securityContext  }}          
-          securityContext:
-          {{- toYaml ( index $val.securityContext )| nindent 12 }}   
-          {{- end }} 
-          ###### volumeMounts     
-          {{- if index $val.volumeMounts  }}                                                  
-          volumeMounts:
-            {{-  toYaml ( index $val.volumeMounts ) | nindent 12 }} 
-          {{- end }}   
-          ###### env block   
-          {{- if index $val.env  }}                    
-          env:
-            - name: TERM
-              value: "xterm"
-          {{- range $key, $value := index $val.env }}
-            - name: {{ $key }}
-              value: {{ $value | quote }}
-          {{- end }} 
-          {{- end }}       
-    {{- end }}               
-{{- end }}
-
-
-{{/*
-Deployment Containers
-*/}}
-{{- define "general.cronjobContainers" -}}   
-          {{- range $key, $val :=  .containerList }} 
-          - name: {{ index $val.name }}
-            image: {{ index $val.repository }}:{{ index $val.tag }}
-            imagePullPolicy: {{ index $val.pullPolicy | default "IfNotPresent" }}
-            ###### lifecycle
-            {{- if index $val.lifecycle  }}
-            lifecycle:
-            {{- toYaml ( index $val.lifecycle ) | nindent 14 -}}
-            {{- end }}    
-            ##### container run command
-            {{- if index $val.cmd  }}
-            command:
-            {{- toYaml ( index $val.cmd  )| nindent 14 }}
-            {{- end }}
-            {{- if index $val.arg  }}
-            args:
-            {{- toYaml ( index $val.arg )| nindent 14 }}
-            {{- end }}     
-            ##### container ports 
-            ports:
-            {{- range (index $val.containerPort ) }}
-            - containerPort: {{ . }}
-            {{- end }}            
-            ##### resources                    
-            {{- if index $val.resources  }}
-            resources:
-            {{- toYaml (index $val.resources ) | nindent 14 }}          
-            {{- end }}  
-            ##### readinessProbe probe
-            {{- if index $val.readinessProbe  }}
-            readinessProbe:
-            {{- toYaml (index $val.readinessProbe ) | nindent 14 }}
-            {{- end }}
-            ##### livenessProbe probe
-            {{- if index $val.livenessProbe  }}
-            livenessProbe:
-            {{- toYaml ( index $val.livenessProbe ) | nindent 14 }}
-            {{- end }}              
-            ###### securityContext
-            {{- if index $val.securityContext  }}          
-            securityContext:
-            {{- toYaml ( index $val.securityContext )| nindent 14 }}   
-            {{- end }} 
-            ###### volumeMounts     
-            {{- if index $val.volumeMounts  }}                                                  
-            volumeMounts:
-              {{-  toYaml ( index $val.volumeMounts ) | nindent 14 }} 
-            {{- end }}   
-            ###### env block   
-            {{- if index $val.env  }}                    
-            env:
-              - name: TERM
-                value: "xterm"
-            {{- range $key, $value := index $val.env }}
-              - name: {{ $key }}
-                value: {{ $value | quote }}
-            {{- end }} 
-            {{- end }}       
-          {{- end }}  
-{{- end }}

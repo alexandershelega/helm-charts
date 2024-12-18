@@ -70,64 +70,63 @@ spec:
           {{- end }} 
           restartPolicy: {{ .Values.cronjob.restartPolicy }}                     
           containers:     
-          - name: {{ index .Values.name }}
-            image: {{ index .Values.repository }}:{{ index .Values.tag }}
-            imagePullPolicy: {{ index .Values.pullPolicy | default "IfNotPresent" }}
+          - name: {{ .Values.containers.name }}
+            image: {{ .Values.containers.repository }}:{{ .Values.containers.tag }}
+            imagePullPolicy: {{ .Values.containers.pullPolicy | default "IfNotPresent" }}
             ###### lifecycle
-            {{- if index .Values.lifecycle  }}
+            {{- if .Values.containers.lifecycle  }}
             lifecycle:
-            {{- toYaml ( index .Values.lifecycle ) | nindent 14 -}}
+            {{- toYaml ( .Values.containers.lifecycle ) | nindent 14 -}}
             {{- end }}    
             ##### container run command
-            {{- if index .Values.cmd  }}
+            {{- if .Values.containers.cmd  }}
             command:
-            {{- toYaml ( index .Values.cmd  )| nindent 14 }}
+            {{- toYaml ( .Values.containers.cmd  )| nindent 14 }}
             {{- end }}
-            {{- if index .Values.arg  }}
+            {{- if .Values.containers.arg  }}
             args:
-            {{- toYaml ( index .Values.arg )| nindent 14 }}
+            {{- toYaml ( .Values.arg )| nindent 14 }}
             {{- end }}     
             ##### container ports 
             ports:
-            {{- range (index .Values.containerPort ) }}
+            {{- range (index .Values.containers.containerPort ) }}
             - containerPort: {{ . }}
             {{- end }}            
             ##### resources                    
-            {{- if index .Values.resources  }}
+            {{- if .Values.containers.resources  }}
             resources:
-            {{- toYaml (index .Values.resources ) | nindent 14 }}          
+            {{- toYaml (index .Values.containers.resources ) | nindent 14 }}          
             {{- end }}  
             ##### readinessProbe probe
-            {{- if index .Values.readinessProbe  }}
+            {{- if .Values.containers.readinessProbe  }}
             readinessProbe:
-            {{- toYaml (index .Values.readinessProbe ) | nindent 14 }}
+            {{- toYaml (index .Values.containers.readinessProbe ) | nindent 14 }}
             {{- end }}
             ##### livenessProbe probe
-            {{- if index .Values.livenessProbe  }}
+            {{- if .Values.containers.livenessProbe  }}
             livenessProbe:
-            {{- toYaml ( index .Values.livenessProbe ) | nindent 14 }}
+            {{- toYaml ( .Values.containers.livenessProbe ) | nindent 14 }}
             {{- end }}              
             ###### securityContext
-            {{- if index .Values.securityContext  }}          
+            {{- if .Values.containers.securityContext  }}          
             securityContext:
-            {{- toYaml ( index .Values.securityContext )| nindent 14 }}   
+            {{- toYaml ( .Values.containers.securityContext )| nindent 14 }}   
             {{- end }} 
             ###### volumeMounts     
-            {{- if index .Values.volumeMounts  }}                                                  
+            {{- if .Values.containers.volumeMounts  }}                                                  
             volumeMounts:
-              {{-  toYaml ( index .Values.volumeMounts ) | nindent 14 }} 
+              {{-  toYaml ( .Values.containers.volumeMounts ) | nindent 14 }} 
             {{- end }}   
             ###### env block   
-            {{- if index .Values.env  }}                    
+            {{- if .Values.containers.env  }}                    
             env:
               - name: TERM
                 value: "xterm"
-            {{- range $key, $value := index .Values.env }}
+            {{- range $key, $value := .Values.containers.env }}
               - name: {{ $key }}
                 value: {{ $value | quote }}
             {{- end }} 
-            {{- end }}       
-          {{- end }}            
+            {{- end }}                  
           ##### volumes
           {{- if .Values.volumes  }}
           volumes:
