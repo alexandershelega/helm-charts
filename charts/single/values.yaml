@@ -69,7 +69,7 @@ minReadySeconds: 5
 
 
 ###### Cluster IP service description
-service_internal:
+service:
   ##### set type: none for disable current svc or ClusterIP/NodePort for enable
   type: ClusterIP
   portname: tcp
@@ -77,20 +77,6 @@ service_internal:
   annotations: {}
   extraSelector: {}
 
-###### LoadBalancer service description
-service_public:
-  ##### set type: none for disable current svc or LoadBalancer for enable
-  type: none
-  port: ["80"]
-  annotations: {}
-    # cloud.google.com/load-balancer-type: "Internal"
-  loadBalancerSourceRanges:
-    enabled: true
-    adresses: [ "0.0.0.0/0"]
-  externalTrafficPolicy: Cluster
-  ##### Leave empty to auto alocate#
-  loadBalancerExternalAdresses:
-    adresses:
 
 
 #### container description
@@ -158,7 +144,7 @@ containers:
 ###### Deployment description
 
 deployment: 
-   enabled: false
+   enabled: true
    replicaCount: 1  
    strategy: 
      type: RollingUpdate
