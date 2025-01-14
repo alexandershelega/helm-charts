@@ -192,6 +192,8 @@ cronjob:
   failedJobsHistoryLimit: 1
   activeDeadlineSeconds:
 
+terminationGracePeriodSeconds: 60
+
 volumes:
 #  - name: dshm
 #    emptyDir:

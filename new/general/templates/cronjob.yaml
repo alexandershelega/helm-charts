@@ -35,6 +35,8 @@ spec:
             {{- toYaml .Values.labels | nindent 12 }}
             {{- end }}
         spec:
+          ##### terminationGracePeriodSeconds block
+          terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | default "60" }}        
           ##### host network block           
           {{- if .Values.hostNetwork  }}
           hostNetwork: {{ .Values.hostNetwork }}
