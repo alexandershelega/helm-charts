@@ -57,7 +57,7 @@ tolerations: {}
 podSecurityContext: {}
 
 minReadySeconds: 5
-
+terminationGracePeriodSeconds: 30
 ###### Cluster IP service description
 service:
   ##### set type: none for disable current svc or ClusterIP/NodePort for enable
@@ -192,7 +192,6 @@ cronjob:
   failedJobsHistoryLimit: 1
   activeDeadlineSeconds:
 
-terminationGracePeriodSeconds: 60
 
 volumes:
 #  - name: dshm

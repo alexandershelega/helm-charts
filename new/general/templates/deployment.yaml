@@ -43,7 +43,7 @@ spec:
         {{- end }}
     spec:
       ##### terminationGracePeriodSeconds block
-      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | default "60" }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | default "30" }}
       ##### host network block      
       {{- if .Values.hostNetwork  }}
       hostNetwork: {{ .Values.hostNetwork }}
