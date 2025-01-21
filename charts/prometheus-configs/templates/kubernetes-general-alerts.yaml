@@ -231,7 +231,7 @@ spec:
           expr: >
             sum(avg_over_time(netdata_system_load_load_average{provider=~"{{ $kubernetes_clusters.provider }}",cluster_name=~"{{ $kubernetes_clusters.cluster_name }}",dimension="load1",env!="non-kubernetes"}[90s])) by (provider,region,cluster_name,instance)
                           >(count(sum(avg_over_time(netdata_cpu_cpu_percentage_average [90s])) by (provider,region,cluster_name,instance,chart)) by (provider,region,cluster_name,instance) - 0)
-          for: 5m
+          for: 10m
           labels:
             environment: {{ $kubernetes_clusters.environment | default "production" }}
             severity: major
