@@ -6,3 +6,12 @@ appVersion: "1.0.0"
 maintainers:
 - name: Alexander Shelega
   email: alexander.shelega@gmail.com
+# Add the following recommended fields:
+type: application
+keywords:
+  - general
+  - kubernetes
+  - deployment
+home: https://github.com/alexandershelega/helm-charts
+sources:
+  - https://github.com/alexandershelega/helm-charts
