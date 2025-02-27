@@ -3,8 +3,8 @@
 Expand the name of the chart.
 */}}
 {{- define "general.name" -}}
-{{- default .Values.name | trunc 63 | trimSuffix "-" }}
-{{- end }}
+{{- .Values.name | default (printf "%s" .Chart.Name) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 
 
 {{/*
@@ -13,6 +13,16 @@ Create chart name and version as used by the chart label.
 {{- define "general.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
+
+
+{{- define "general.validateValues" -}}
+{{- if and .Values.deployment.enabled .Values.daemonset.enabled -}}
+{{- fail "Both deployment and daemonset cannot be enabled simultaneously" -}}
+{{- end -}}
+{{- if and .Values.deployment.enabled .Values.cronjob.enabled -}}
+{{- fail "Both deployment and cronjob cannot be enabled simultaneously" -}}
+{{- end -}}
+{{- end -}}
 
 
 {{/*
