@@ -45,7 +45,6 @@ spec:
       {{- if .Values.hostNetwork  }}
       hostNetwork: {{ .Values.hostNetwork }}
       {{- end }}
-      {{- if .Values.imagePullSecrets  }}
       ##### pull secret block      
       {{- if .Values.imagePullSecrets  }}
       imagePullSecrets:

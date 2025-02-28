@@ -29,4 +29,10 @@ app.kubernetes.io/name: {{ include "single.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
-   
+{{/*
+Selector labels
+*/}}
+{{- define "single.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "single.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}   
