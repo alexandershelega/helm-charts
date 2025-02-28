@@ -5,7 +5,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2025-02-28T12:06:25.017694444Z",
+        "created": "2025-02-28T12:12:22.436995704Z",
         "description": "Universal Chart for deploying kubernetes applications",
         "digest": "fc3084a7103a86ea543d34f6926d85cebc0d7fbc776ad8158a158af83b6f8d20",
         "maintainers": [
@@ -23,7 +23,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2025-02-28T12:06:25.017074157Z",
+        "created": "2025-02-28T12:12:22.436393356Z",
         "description": "Universal Chart for deploying kubernetes applications",
         "digest": "a435921ee4b8e9394ddeed2a54320607c37aa3478eaa6a7fd95b6e5e6669420b",
         "maintainers": [
@@ -46,7 +46,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2025-02-28T12:06:25.018320922Z",
+        "created": "2025-02-28T12:12:22.437673414Z",
         "description": "Prometheus Alert Generator",
         "digest": "b207bb9834276d8db0cf10f3475dfb7c481b4a4f41784f70edf5a1f9409a611c",
         "maintainers": [
@@ -64,7 +64,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2025-02-28T12:06:25.018031177Z",
+        "created": "2025-02-28T12:12:22.437324891Z",
         "description": "Prometheus Alert Generator",
         "digest": "ded7737d35aedd091bce1625aaf1fe617b3c4a2c19012db5abde0a9d3680fd74",
         "maintainers": [
@@ -87,27 +87,9 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2025-02-28T12:06:25.02258913Z",
+        "created": "2025-02-28T12:12:22.440417025Z",
         "description": "Universal Chart for deploying kubernetes applications",
-        "digest": "4d6f8f38eb822e5c2337f69aef0abbb635d7d81cc894079f9de06f79256acec2",
-        "maintainers": [
-          {
-            "email": "alexander.shelega@gmail.com",
-            "name": "Alexander Shelega"
-          }
-        ],
-        "name": "single",
-        "urls": [
-          "https://alexandershelega.github.io/helm-charts/packages/single-0.0.6.tgz"
-        ],
-        "version": "0.0.6"
-      },
-      {
-        "apiVersion": "v2",
-        "appVersion": "1.0.0",
-        "created": "2025-02-28T12:06:25.022028125Z",
-        "description": "Universal Chart for deploying kubernetes applications",
-        "digest": "22d29f57ebb3c53f054a54d25ecb5dc631709873aed94464dd705a8fadfb1468",
+        "digest": "b62e4820ff821431301063c10ddfd5539377cf1b2dacaea4b924be3bb9dea65c",
         "maintainers": [
           {
             "email": "alexander.shelega@gmail.com",
@@ -123,7 +105,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2025-02-28T12:06:25.020754108Z",
+        "created": "2025-02-28T12:12:22.439867796Z",
         "description": "Universal Chart for deploying kubernetes applications",
         "digest": "c9ffe1ae5985773b1713c8d38ac86d6822a2a14799abd963701824c6207cfbf6",
         "maintainers": [
@@ -141,7 +123,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2025-02-28T12:06:25.020217419Z",
+        "created": "2025-02-28T12:12:22.439370795Z",
         "description": "Universal Chart for deploying kubernetes applications",
         "digest": "b897cd50509a8f2b4f916ec8aabe23f73bb0d4d2bfb542759b3b5a5e343e3a17",
         "maintainers": [
@@ -159,7 +141,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2025-02-28T12:06:25.019522963Z",
+        "created": "2025-02-28T12:12:22.438830282Z",
         "description": "Universal Chart for deploying kubernetes applications",
         "digest": "9b2e5de0e41e8b7f0672316251cf2062025d6b270f33c63a54f2265428eb03c6",
         "maintainers": [
@@ -177,7 +159,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2025-02-28T12:06:25.018955516Z",
+        "created": "2025-02-28T12:12:22.438275632Z",
         "description": "Universal Chart for deploying kubernetes applications",
         "digest": "7c4887d2ab6bb86fad39d61a1cd3bcac661c02ef31276aa0bec7e2fcfb401999",
         "maintainers": [
@@ -200,7 +182,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2025-02-28T12:06:25.024031232Z",
+        "created": "2025-02-28T12:12:22.442566014Z",
         "description": "VM Alert/Scrape Generator",
         "digest": "a4cd899c68c241ed5d04f4c6a4ac0e5a4a03f71133ecc9af1082406a5f3fabd6",
         "maintainers": [
@@ -218,7 +200,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2025-02-28T12:06:25.023755774Z",
+        "created": "2025-02-28T12:12:22.442285739Z",
         "description": "VM Alert/Scrape Generator",
         "digest": "71dbc4dbe5184ae452c57a4c5a77a87c8de4a79321d3c81b3b051f5dadbb93e2",
         "maintainers": [
@@ -236,7 +218,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2025-02-28T12:06:25.023474685Z",
+        "created": "2025-02-28T12:12:22.441962834Z",
         "description": "VM Alert/Scrape Generator",
         "digest": "f3930d1c32e783f4c6601ce6d6b827b30c8b7f5116690eb189ce2cc16f7c6273",
         "maintainers": [
@@ -254,7 +236,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2025-02-28T12:06:25.023178208Z",
+        "created": "2025-02-28T12:12:22.441671689Z",
         "description": "VM Alert/Scrape Generator",
         "digest": "c9352d9cce4af79904884f5a8cbdb82478520d16c7e12b8a1233423510d56f58",
         "maintainers": [
@@ -272,7 +254,7 @@
       {
         "apiVersion": "v2",
         "appVersion": "1.0.0",
-        "created": "2025-02-28T12:06:25.022886349Z",
+        "created": "2025-02-28T12:12:22.441052535Z",
         "description": "VM Alert/Scrape Generator",
         "digest": "e6d77ceaed6b41a2ed86516473c2c4212e90749ed8416f6b391b511ad4bb9cc4",
         "maintainers": [
