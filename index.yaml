@@ -3,7 +3,7 @@ entries:
   general:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-02-28T10:30:22.566445043Z"
+    created: "2025-02-28T12:06:00.173780265Z"
     description: Universal Chart for deploying kubernetes applications
     digest: fc3084a7103a86ea543d34f6926d85cebc0d7fbc776ad8158a158af83b6f8d20
     maintainers:
@@ -15,7 +15,7 @@ entries:
     version: 0.1.8
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-02-28T10:30:22.565810832Z"
+    created: "2025-02-28T12:06:00.173135657Z"
     description: Universal Chart for deploying kubernetes applications
     digest: a435921ee4b8e9394ddeed2a54320607c37aa3478eaa6a7fd95b6e5e6669420b
     maintainers:
@@ -28,7 +28,7 @@ entries:
   prometheus-configs:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-02-28T10:30:22.567033919Z"
+    created: "2025-02-28T12:06:00.17440691Z"
     description: Prometheus Alert Generator
     digest: b207bb9834276d8db0cf10f3475dfb7c481b4a4f41784f70edf5a1f9409a611c
     maintainers:
@@ -40,7 +40,7 @@ entries:
     version: 0.0.7
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-02-28T10:30:22.566753402Z"
+    created: "2025-02-28T12:06:00.174109302Z"
     description: Prometheus Alert Generator
     digest: ded7737d35aedd091bce1625aaf1fe617b3c4a2c19012db5abde0a9d3680fd74
     maintainers:
@@ -53,7 +53,19 @@ entries:
   single:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-02-28T10:30:22.569708952Z"
+    created: "2025-02-28T12:06:00.177646945Z"
+    description: Universal Chart for deploying kubernetes applications
+    digest: 4d6f8f38eb822e5c2337f69aef0abbb635d7d81cc894079f9de06f79256acec2
+    maintainers:
+    - email: alexander.shelega@gmail.com
+      name: Alexander Shelega
+    name: single
+    urls:
+    - https://alexandershelega.github.io/helm-charts/packages/single-0.0.6.tgz
+    version: 0.0.6
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2025-02-28T12:06:00.177122432Z"
     description: Universal Chart for deploying kubernetes applications
     digest: 22d29f57ebb3c53f054a54d25ecb5dc631709873aed94464dd705a8fadfb1468
     maintainers:
@@ -65,7 +77,7 @@ entries:
     version: 0.0.5
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-02-28T10:30:22.569197281Z"
+    created: "2025-02-28T12:06:00.176598539Z"
     description: Universal Chart for deploying kubernetes applications
     digest: c9ffe1ae5985773b1713c8d38ac86d6822a2a14799abd963701824c6207cfbf6
     maintainers:
@@ -77,7 +89,7 @@ entries:
     version: 0.0.4
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-02-28T10:30:22.568675722Z"
+    created: "2025-02-28T12:06:00.176066522Z"
     description: Universal Chart for deploying kubernetes applications
     digest: b897cd50509a8f2b4f916ec8aabe23f73bb0d4d2bfb542759b3b5a5e343e3a17
     maintainers:
@@ -89,7 +101,7 @@ entries:
     version: 0.0.3
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-02-28T10:30:22.568160825Z"
+    created: "2025-02-28T12:06:00.175569199Z"
     description: Universal Chart for deploying kubernetes applications
     digest: 9b2e5de0e41e8b7f0672316251cf2062025d6b270f33c63a54f2265428eb03c6
     maintainers:
@@ -101,7 +113,7 @@ entries:
     version: 0.0.2
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-02-28T10:30:22.567616593Z"
+    created: "2025-02-28T12:06:00.174997628Z"
     description: Universal Chart for deploying kubernetes applications
     digest: 7c4887d2ab6bb86fad39d61a1cd3bcac661c02ef31276aa0bec7e2fcfb401999
     maintainers:
@@ -114,7 +126,7 @@ entries:
   vm-configs:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-02-28T10:30:22.571957317Z"
+    created: "2025-02-28T12:06:00.179764542Z"
     description: VM Alert/Scrape Generator
     digest: a4cd899c68c241ed5d04f4c6a4ac0e5a4a03f71133ecc9af1082406a5f3fabd6
     maintainers:
@@ -126,7 +138,7 @@ entries:
     version: 0.0.7
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-02-28T10:30:22.57165559Z"
+    created: "2025-02-28T12:06:00.179108665Z"
     description: VM Alert/Scrape Generator
     digest: 71dbc4dbe5184ae452c57a4c5a77a87c8de4a79321d3c81b3b051f5dadbb93e2
     maintainers:
@@ -138,7 +150,7 @@ entries:
     version: 0.0.6
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-02-28T10:30:22.571022118Z"
+    created: "2025-02-28T12:06:00.178520232Z"
     description: VM Alert/Scrape Generator
     digest: f3930d1c32e783f4c6601ce6d6b827b30c8b7f5116690eb189ce2cc16f7c6273
     maintainers:
@@ -150,7 +162,7 @@ entries:
     version: 0.0.5
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-02-28T10:30:22.570276077Z"
+    created: "2025-02-28T12:06:00.17821535Z"
     description: VM Alert/Scrape Generator
     digest: c9352d9cce4af79904884f5a8cbdb82478520d16c7e12b8a1233423510d56f58
     maintainers:
@@ -162,7 +174,7 @@ entries:
     version: 0.0.4
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-02-28T10:30:22.569986273Z"
+    created: "2025-02-28T12:06:00.1779429Z"
     description: VM Alert/Scrape Generator
     digest: e6d77ceaed6b41a2ed86516473c2c4212e90749ed8416f6b391b511ad4bb9cc4
     maintainers:
@@ -172,4 +184,4 @@ entries:
     urls:
     - https://alexandershelega.github.io/helm-charts/packages/vm-configs-0.0.3.tgz
     version: 0.0.3
-generated: "2025-02-28T10:30:22.564955446Z"
+generated: "2025-02-28T12:06:00.171630004Z"
