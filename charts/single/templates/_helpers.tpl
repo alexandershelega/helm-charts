@@ -20,7 +20,6 @@ Common labels
 */}}
 {{- define "single.labels" -}}
 helm.sh/chart: {{ include "single.chart" . }}
-{{ include "single.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -29,10 +28,3 @@ app.kubernetes.io/name: {{ include "single.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
-{{/*
-Selector labels
-*/}}
-{{- define "single.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "single.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}   
