@@ -3,7 +3,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ include "general.name" . }}
+  name: {{ include "single.name" . }}
   annotations:
   {{- toYaml .Values.annotations | nindent 4 }}
   labels:
