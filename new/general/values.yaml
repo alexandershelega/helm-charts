@@ -129,6 +129,12 @@ containers:
     #    port: 80
     #  initialDelaySeconds: 5
     #  periodSeconds: 10
+    startupProbe: {}
+    #  httpGet:
+    #    path: /
+    #    port: 80
+    #  initialDelaySeconds: 5
+    #  periodSeconds: 10    
     ##### resource  description
     resources: {}
     #  limits:

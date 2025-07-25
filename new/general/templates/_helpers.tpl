@@ -82,7 +82,12 @@ Deployment Containers
         {{- if index $val.livenessProbe  }}
         livenessProbe:
         {{- toYaml ( index $val.livenessProbe ) | nindent 12 }}
-        {{- end }}              
+        {{- end }}      
+        ##### startupProbe probe
+        {{- if index $val.startupProbe  }}
+        startupProbe:
+        {{- toYaml ( index $val.startupProbe ) | nindent 14 }}
+        {{- end }}                  
         ###### securityContext
         {{- if index $val.securityContext  }}          
         securityContext:
@@ -148,7 +153,12 @@ Deployment Containers
             {{- if index $val.livenessProbe  }}
             livenessProbe:
             {{- toYaml ( index $val.livenessProbe ) | nindent 14 }}
-            {{- end }}              
+            {{- end }}      
+            ##### startupProbe probe
+            {{- if index $val.startupProbe  }}
+            startupProbe:
+            {{- toYaml ( index $val.startupProbe ) | nindent 14 }}
+            {{- end }}                     
             ###### securityContext
             {{- if index $val.securityContext  }}          
             securityContext:
