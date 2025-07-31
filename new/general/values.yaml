@@ -54,7 +54,7 @@ tolerations: {}
 #  operator: "Equal"
 #  value: "main"
 #  effect: "NoSchedule"
-podSecurityContext: {}
+securityContext: {}
 
 minReadySeconds: 5
 terminationGracePeriodSeconds: 30

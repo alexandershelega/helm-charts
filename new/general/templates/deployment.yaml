@@ -69,7 +69,7 @@ spec:
       serviceAccountName: {{ include "general.name" . }}
       ##### security context block
       securityContext:
-      {{- toYaml .Values.podSecurityContext | nindent 10 }} 
+      {{- toYaml .Values.securityContext | nindent 10 }} 
       ##### priority class block
       {{- if  .Values.priorityClassName }}
       priorityClassName:  {{ .Values.priorityClassName }}
