@@ -1,8 +1,10 @@
 ###### Global environments
 
 name: nginx
-hostNetwork:
 imagePullSecrets: {}
+hostNetwork: 
+dnsPolicy: 
+dnsConfig: {}
 
 ###### Service Account
 serviceAccount:

@@ -48,6 +48,13 @@ spec:
       {{- if .Values.hostNetwork  }}
       hostNetwork: {{ .Values.hostNetwork }}
       {{- end }}
+      ##### dns policy block            
+      dnsPolicy: {{ .Values.dnsPolicy | default "ClusterFirst" }}
+      ##### dns config block
+      {{- if .Values.dnsConfig  }}
+      dnsConfig:
+      {{- toYaml .Values.dnsConfig | nindent 10 }}
+      {{- end }}
       ##### pull secret block      
       {{- if .Values.imagePullSecrets  }}
       imagePullSecrets:
